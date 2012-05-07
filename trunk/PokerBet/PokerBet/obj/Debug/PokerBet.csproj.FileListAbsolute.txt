@@ -5,3 +5,10 @@ D:\Projects1\PokerBet\PokerBet\bin\EntityFramework.xml
 D:\Projects1\PokerBet\PokerBet\obj\Debug\ResolveAssemblyReference.cache
 D:\Projects1\PokerBet\PokerBet\obj\Debug\PokerBet.dll
 D:\Projects1\PokerBet\PokerBet\obj\Debug\PokerBet.pdb
+D:\Projects\PokerBet\PokerBet\PokerBet\bin\PokerBet.dll
+D:\Projects\PokerBet\PokerBet\PokerBet\bin\PokerBet.pdb
+D:\Projects\PokerBet\PokerBet\PokerBet\bin\EntityFramework.dll
+D:\Projects\PokerBet\PokerBet\PokerBet\bin\EntityFramework.xml
+D:\Projects\PokerBet\PokerBet\PokerBet\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\PokerBet\PokerBet\PokerBet\obj\Debug\PokerBet.dll
+D:\Projects\PokerBet\PokerBet\PokerBet\obj\Debug\PokerBet.pdb
