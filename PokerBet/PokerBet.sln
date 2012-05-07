@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerBet", "PokerBet\PokerBet.csproj", "{A3B368CC-765E-42FF-91D1-A2B9DBD6D959}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{17D26AD8-BC28-4FE7-BF03-321AFFE21CD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{CF265A10-1329-4032-87A2-B882589E0592}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{A3B368CC-765E-42FF-91D1-A2B9DBD6D959}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3B368CC-765E-42FF-91D1-A2B9DBD6D959}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3B368CC-765E-42FF-91D1-A2B9DBD6D959}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17D26AD8-BC28-4FE7-BF03-321AFFE21CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17D26AD8-BC28-4FE7-BF03-321AFFE21CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17D26AD8-BC28-4FE7-BF03-321AFFE21CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17D26AD8-BC28-4FE7-BF03-321AFFE21CD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF265A10-1329-4032-87A2-B882589E0592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF265A10-1329-4032-87A2-B882589E0592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF265A10-1329-4032-87A2-B882589E0592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF265A10-1329-4032-87A2-B882589E0592}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

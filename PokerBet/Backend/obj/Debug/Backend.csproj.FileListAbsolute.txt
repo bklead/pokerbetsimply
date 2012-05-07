@@ -1,0 +1,9 @@
+D:\Projects\PokerBet\PokerBet\Backend\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\Backend.dll
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\Backend.pdb
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\Domain.dll
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\EntityFramework.dll
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\Domain.pdb
+D:\Projects\PokerBet\PokerBet\Backend\bin\Debug\EntityFramework.xml
+D:\Projects\PokerBet\PokerBet\Backend\obj\Debug\Backend.dll
+D:\Projects\PokerBet\PokerBet\Backend\obj\Debug\Backend.pdb
