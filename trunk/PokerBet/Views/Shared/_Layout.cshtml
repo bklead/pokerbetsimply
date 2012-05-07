@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+    <script src="/Scripts/bmpoker.js?v=2" type="text/javascript"></script>
+
+    <script src="/Scripts/jquery-1.5.1.min.js" type="text/javascript"></script>
+    <script src="/Scripts/modernizr-1.7.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function resize() {
+            h = $(window).height();
+            w = $(window).width();
+            tw = $('.tables').width();
+            th = $('.tables').height();
+            zoom1 = w / (2.28 * tw); //*
+            zoom2 = h / (2.85 * th);
+            zoom = Math.min(zoom1, zoom2);
+            $('body').css('zoom', zoom);
+            //$('body').css('-moz-transform','scale('+zoom+')');
+        }
+    </script>
+</head>
+
+<body onload="resize()">
+    <div id='logData'></div>
+
+    <div class="mainddesk">
+      <div class="maindesk">
+        <img class="krivaya" src="images/bg1.png" width="100%" height="80%" alt="maindesk">
+      </div>
+
+    </div>
+    <div class="table">
+      <table width="100%" height="100%" border="0" bordercolor="#000000" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right" valign="top">
+          <div class="headlogo">
+          <img src="images/head.png" alt="logo">
+          </div>
+          </td>
+          <td width="50">&nbsp;</td>
+          <td height="60" align="left" valign="top">
+          <div class="header"><img class="headstatus" src="images/status.png" alt="status">
+      	    <div id="progressBar" style="height: 18px; width:130px; position:relative;">
+            <div id="progress_bar" class="ui-progress-bar ui-container">
+                <div class="ui-progress" style="width: 100%;">
+                    <span class="ui-label" style="display:none;"><b class="value">100%</b></span>
+                </div>
+            </div>
+		    </div>
+		    <div id="draw" class="shadowDraw" style="height: 40px; width:160px; position:relative; margin-top: -18px; margin-left: 253px;"></div>
+
+            <img class="roundsee" src="images/round.png" alt="round">
+        		    <div id="round" class="shadowRound" style="height: 40px; width:140px; position:absolute; top: 0px; margin-left: -78px;"></div>
+           </div>
+            </td>
+          </tr>
+        <tr>
+          <td>
+          <div class="tables" style="float:right;"><div class="tableCSS" ><div class="cloth" ><div class="TableNum">1</div><table class="descCards" align="center"><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Turn</td><td class="flop">River</td></table></div></div>
+          <div id="one" style="height: 120px; width:500px; position:relative; margin-top: -390px;">
+		    <div id="one0G" class="glow" style="width:132px;position:absolute; top: 68px; margin-left: 66px;display:none;"></div>
+		    <div id="one0" style="width:130px ;position:absolute; top: 90px; margin-left: 100px;; "></div>
+		    <div id="one0K" class="item" style="position:absolute; top: 152px; margin-left: 98px; "></div>
+		    <div id="one0N" class="shadowWhite" style="width:132px ;position:absolute; top: 185px; margin-left: 60px; "></div>
+		    <div player=10 class="chip opac" style="position:absolute; top: 130px; margin-left: 160px; "></div>
+
+		    <div id="one1G" class="glow" style="width:132px;position:absolute; top: 68px; margin-left: 254px;display:none;"></div>
+		    <div id="one1" style="width:190px ;position:absolute; top: 90px; margin-left: 288px"></div>
+		    <div id="one1K" class="item" style="position:absolute; top: 152px; margin-left: 286px;"></div>
+		    <div id="one1N" class="shadowWhite" style="width:132px ;position:absolute; top: 185px; margin-left: 255px; "></div>
+		    <div player=11 class="chip opac" style="position:absolute; top: 130px; margin-left: 348px;"></div>
+
+		    <div id="one2G" class="glow" style="width:132px;position:absolute; top: 282px; margin-left: 51px;display:none;"></div>
+		    <div id="one2" style="width:130px ;position:absolute; top: 305px; margin-left: 85px"></div>
+		    <div id="one2K" class="item" style="position:absolute; top: 366px; margin-left: 83px;"></div>
+		    <div id="one2N" class="shadowWhite" style="width:132px ;position:absolute; top: 278px; margin-left: 43px; "></div>
+		    <div player=12 class="chip opac" style="position:absolute; top: 335px; margin-left: 145px;"></div>
+
+		    <div id="one3G" class="glow" style="width:132px;position:absolute; top: 282px; margin-left: 274px;display:none;"></div>
+		    <div id="one3" style="width:190px ;position:absolute; top: 305px; margin-left: 308px"></div>
+		    <div id="one3K" class="item" style="position:absolute; top: 366px; margin-left: 306px;"></div>
+		    <div id="one3N" class="shadowWhite" style="width:132px ;position:absolute; top: 280px; margin-left: 275px; "></div>
+		    <div player=13 class="chip opac" style="position:absolute; top: 335px; margin-left: 368px;"></div>
+
+		    <div id="oneDeskC_2" class="combi yellow" style="position:absolute; top: 195px; margin-left: 110px;display:none;">Straight Flush</div>
+		    <div id="oneDesk" style="width:350px ;position:absolute; top: 217px; margin-left: 123px"></div>
+	    </div>
+          </div>
+
+          </td>
+          <td>&nbsp;</td>
+          <td><div class="tables" style="float:left;"><div class="tableCSS" ><div class="cloth" ><div class="TableNum">2</div><table class="descCards" align="center"><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Turn</td><td class="flop">River</td></table></div></div>
+	    <div id="two" style="height: 300px; width:500px; position:relative; top: -390px; margin-left: 0px;">
+
+		    <div id="two0G" class="glow" style="width:132px;position:absolute; top: 83px; margin-left: 34px;display:none;"></div>
+		    <div id="two0" style="width:130px ;position:absolute; top: 105px; margin-left: 67px;"></div>
+		    <div id="two0K" class="item" style="position:absolute; top: 165px; margin-left: 67px; "></div>
+		    <div id="two0N" class="shadowWhite" style="width:132px ;position:absolute; top: 200px; margin-left: 37px; "></div>
+		    <div player=20 class="chip opac" style="position:absolute; top: 145px; margin-left: 127px;"></div>
+
+		    <div id="two1G" class="glow" style="width:132px;position:absolute; top: 72px; margin-left: 164px;display:none;"></div>
+		    <div id="two1" style="width:190px ;position:absolute; top: 95px; margin-left: 197px"></div>
+		    <div id="two1K" class="item" style="position:absolute; top: 155px; margin-left: 197px;"></div>
+		    <div id="two1N" class="shadowWhite" style="width:132px ;position:absolute; top: 185px; margin-left: 170px; "></div>
+		    <div player=21 class="chip opac" style="position:absolute; top: 135px; margin-left: 260px;"></div>
+
+		    <div id="two2G" class="glow" style="width:132px;position:absolute; top: 78px; margin-left: 297px;display:none;"></div>
+		    <div id="two2" style="width:190px ;position:absolute; top: 100px; margin-left: 330px"></div>
+		    <div id="two2K" class="item" style="position:absolute; top: 160px; margin-left: 330px;"></div>
+		    <div id="two2N" class="shadowWhite" style="width:132px ;position:absolute; top: 190px; margin-left: 300px; "></div>
+		    <div player=22 class="chip opac" style="position:absolute; top: 135px; margin-left: 390px;"></div>
+
+		    <div id="two3G" class="glow" style="width:132px;position:absolute; top: 268px; margin-left: 34px;display:none;"></div>
+		    <div id="two3" style="width:190px ;position:absolute; top: 290px; margin-left: 67px"></div>
+		    <div id="two3K" class="item" style="position:absolute; top: 352px; margin-left: 65px;"></div>
+		    <div id="two3N" class="shadowWhite" style="width:132px ;position:absolute; top: 260px; margin-left: 35px; "></div>
+		    <div player=23 class="chip opac" style="position:absolute; top: 340px; margin-left: 127px;"></div>
+
+		    <div id="two4G" class="glow" style="width:132px;position:absolute; top: 277px; margin-left: 167px;display:none;"></div>
+		    <div id="two4" style="width:190px ;position:absolute; top: 300px; margin-left: 200px"></div>
+		    <div id="two4K" class="item" style="position:absolute; top: 360px; margin-left: 200px;"></div>
+		    <div id="two4N" class="shadowWhite" style="width:132px ;position:absolute; top: 278px; margin-left: 150px; "></div>
+		    <div player=24 class="chip opac" style="position:absolute; top: 350px; margin-left: 260px;"></div>
+
+		    <div id="two5G" class="glow" style="width:132px;position:absolute; top: 269px; margin-left: 297px;display:none;"></div>
+		    <div id="two5" style="width:190px ;position:absolute; top: 292px; margin-left: 330px"></div>
+		    <div id="two5K" class="item" style="position:absolute; top: 352px; margin-left: 330px;"></div>
+		    <div id="two5N" class="shadowWhite" style="width:132px ;position:absolute; top: 265px; margin-left: 297px; "></div>
+		    <div player=25 class="chip opac" style="position:absolute; top: 335px; margin-left: 390px;"></div>
+
+
+		    <div id="twoDeskC_2" class="combi yellow"style="position:absolute; top: 200px; margin-left: 110px;display:none;">Straight Flush</div>
+		    <div id="twoDesk" style="width:350px ;position:absolute; top: 217px; margin-left: 123px"></div>
+	    </div>
+          </div>
+          </td>
+          </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;<br>
+    <br>
+    </td>
+          </tr>
+        <tr>
+          <td><div class="tables" style="float:right;"><div class="tableCSS" ><div class="cloth" ><div class="TableNum">3</div><table class="descCards" align="center"><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Flop</td><td class="flop">Turn</td><td class="flop">River</td></table></div></div>
+      	    <div id="three" style="height: 5px; width:450px; position:relative; top: -300px; margin-left: 0px; margin-bottom: 10px">
+
+		    <div id="three0G" class="glow" style="width:132px;position:absolute; top: 3px; margin-left: -39px;display:none;"></div>
+		    <div id="three0" style="width:130px ;position:absolute; top: 25px; margin-left: -5px;"></div>
+		    <div id="three0K" class="item" style="position:absolute; top: 85px; margin-left: -5px; "></div>
+		    <div id="three0N" class="shadowWhite" style="width:132px ;position:absolute; top: 115px; margin-left: -35px; "></div>
+		    <div player=30 class="chip opac" style="position:absolute; top: 55px; margin-left: 55px;"></div>
+
+		    <div id="three1G" class="glow" style="width:132px;position:absolute; top: -19px; margin-left: 93px;display:none;"></div>
+		    <div id="three1" style="width:190px ;position:absolute; top: 5px; margin-left: 125px"></div>
+		    <div id="three1K" class="item" style="position:absolute; top: 65px; margin-left: 125px;"></div>
+		    <div id="three1N" class="shadowWhite" style="width:132px ;position:absolute; top: 100px; margin-left: 95px; "></div>
+		    <div player=31 class="chip opac" style="position:absolute; top: 40px; margin-left: 185px;"></div>
+
+		    <div id="three2G" class="glow" style="width:132px;position:absolute; top: -19px; margin-left: 227px;display:none;"></div>
+		    <div id="three2" style="width:190px ;position:absolute; top: 5px; margin-left: 260px"></div>
+		    <div id="three2K" class="item" style="position:absolute; top: 65px; margin-left: 258px;"></div>
+		    <div id="three2N" class="shadowWhite" style="width:132px ;position:absolute; top: 100px; margin-left: 225px; "></div>
+		    <div player=32 class="chip opac" style="position:absolute; top: 50px; margin-left: 320px;"></div>
+
+		    <div id="three3G" class="glow" style="width:132px;position:absolute; top: 3px; margin-left: 356px;display:none;"></div>
+		    <div id="three3" style="width:190px ;position:absolute; top: 25px; margin-left: 390px"></div>
+		    <div id="three3K" class="item" style="position:absolute; top: 85px; margin-left: 388px;"></div>
+		    <div id="three3N" class="shadowWhite" style="width:132px ;position:absolute; top: 120px; margin-left: 355px; "></div>
+		    <div player=33 class="chip opac" style="position:absolute; top: 60px; margin-left: 450px;"></div>
+
+		    <div id="three4G" class="glow" style="width:132px;position:absolute; top: 187px; margin-left: -35px;display:none;"></div>
+		    <div id="three4" style="width:190px ;position:absolute; top: 210px; margin-left: 0px"></div>
+		    <div id="three4K" class="item" style="position:absolute; top: 270px; margin-left: -2px;"></div>
+		    <div id="three4N" class="shadowWhite" style="width:132px ;position:absolute; top: 180px; margin-left: -25px; "></div>
+		    <div player=34 class="chip opac" style="position:absolute; top: 230px; margin-left: 60px;"></div>
+
+		    <div id="three5G" class="glow" style="width:132px;position:absolute; top: 197px; margin-left: 99px;display:none;"></div>
+		    <div id="three5" style="width:190px ;position:absolute; top: 220px; margin-left: 132px"></div>
+		    <div id="three5K" class="item" style="position:absolute; top: 282px; margin-left: 129px;"></div>
+		    <div id="three5N" class="shadowWhite" style="width:132px ;position:absolute; top: 195px; margin-left: 102px; "></div>
+		    <div player=35 class="chip opac" style="position:absolute; top: 255px; margin-left: 187px;"></div>
+
+		    <div id="three6G" class="glow" style="width:132px;position:absolute; top: 197px; margin-left: 227px;display:none;"></div>
+		    <div id="three6" style="width:190px ;position:absolute; top: 220px; margin-left: 260px"></div>
+		    <div id="three6K" class="item" style="position:absolute; top: 282px; margin-left: 259px;"></div>
+		    <div id="three6N" class="shadowWhite" style="width:132px ;position:absolute; top: 195px; margin-left: 225px; "></div>
+		    <div player=36 class="chip opac" style="position:absolute; top: 255px; margin-left: 315px;"></div>
+
+		    <div id="three7G" class="glow" style="width:132px;position:absolute; top: 173px; margin-left: 350px;display:none;"></div>
+		    <div id="three7" style="width:190px ;position:absolute; top: 195px; margin-left: 384px"></div>
+		    <div id="three7K" class="item" style="position:absolute; top: 257px; margin-left: 384px;"></div>
+		    <div id="three7N" class="shadowWhite" style="width:132px ;position:absolute; top: 171px; margin-left: 357px; "></div>
+		    <div player=37 class="chip opac" style="position:absolute; top: 235px; margin-left: 447px;"></div>
+
+
+		    <div id="threeDeskC_2" class="combi yellow"style="position:absolute; top: 105px; margin-left: 110px;display:none;">Straight Flush</div>
+		    <div id="threeDesk" style="width:350px ;position:absolute; top: 127px; margin-left: 123px"></div>
+	    </div>
+          </div>
+
+          </td>
+          <td>&nbsp;</td>
+          <td><div class="tablesa" style="float:left; margin-left:65px;"><img src="images/table4.png" width="412" height="248">
+      	    <div id="tblResults" style="height: 240px; width:410px; position:relative; margin-top: -228px;">
+
+		    <table  id='historyTable' border=0 width=100% class="roundWinners" cellspacing=0 cellpadding=0 style="">
+			    <tr>
+				    <td class="tdRound" round=8 align="left">&nbsp;</td><td class="tdWinner" round=8>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=7 align="left">&nbsp;</td><td class="tdWinner" round=7>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=6 align="left">&nbsp;</td><td class="tdWinner" round=6>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=5 align="left">&nbsp;</td><td class="tdWinner" round=5>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=4 align="left">&nbsp;</td><td class="tdWinner" round=4>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=3 align="left">&nbsp;</td><td class="tdWinner" round=3>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=2 align="left">&nbsp;</td><td class="tdWinner" round=2>&nbsp;</td>
+			    </tr>
+			    <tr>
+				    <td class="tdRound" round=1 align="left">&nbsp;</td><td class="tdWinner" round=1>&nbsp;</td>
+			    </tr>
+		    </table>
+	    </div>
+          </div>
+
+          </td>
+          </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          </tr>
+      </table>
+      </div>
+    @RenderBody()
+</body>
+</html>
