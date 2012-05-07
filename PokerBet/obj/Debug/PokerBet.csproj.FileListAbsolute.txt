@@ -1,0 +1,7 @@
+D:\Projects1\PokerBet\PokerBet\bin\PokerBet.dll
+D:\Projects1\PokerBet\PokerBet\bin\PokerBet.pdb
+D:\Projects1\PokerBet\PokerBet\bin\EntityFramework.dll
+D:\Projects1\PokerBet\PokerBet\bin\EntityFramework.xml
+D:\Projects1\PokerBet\PokerBet\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects1\PokerBet\PokerBet\obj\Debug\PokerBet.dll
+D:\Projects1\PokerBet\PokerBet\obj\Debug\PokerBet.pdb
