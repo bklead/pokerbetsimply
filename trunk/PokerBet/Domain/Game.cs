@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Domain
 {
     [Table("Games")]
-    public class Games
+    public class Game
     {
         [Key]
         public int Id { get; set; }
@@ -47,6 +47,6 @@ namespace Domain
         public short Winning { get; set; }
 
         [ForeignKey("Winning")]
-        public virtual Winnings Winning_base { get; set; }
+        public virtual Winning Winning_base { get; set; }
     }
 }
