@@ -6,5 +6,5 @@ Name nvarchar(20) NOT NULL
 Go
 
 INSERT INTO Winnings(Name)
-Values ('OnePair'), ('TwoPair'), ('Straight'), ('Trips'), ('FlHouse'), ('Flush')
+Values ('NoPair'), ('OnePair'), ('TwoPair'), ('Straight'), ('Trips'), ('FlHouse'), ('Flush')
 Go

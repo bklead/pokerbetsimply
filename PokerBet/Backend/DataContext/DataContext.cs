@@ -9,9 +9,9 @@ namespace Backend.DataContext
 {
     public class PokerBetContext : DbContext
     {
-        public DbSet<Cards> Forums { get; set; }
-        public DbSet<Winnings> Winnings { get; set; }
-        public DbSet<Games> Games { get; set; }
+        public DbSet<Card> Forums { get; set; }
+        public DbSet<Winning> Winnings { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

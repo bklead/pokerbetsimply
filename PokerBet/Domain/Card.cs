@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    [Table("Winnings")]
-    public class Winnings
+    [Table("Cards")]
+    public class Card
     {
         [Key]
         public short Id { get; set; }
