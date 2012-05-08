@@ -20,26 +20,26 @@ namespace Domain
         public short Player3Card2 { get; set; }
         public short Player4Card1 { get; set; }
         public short Player4Card2 { get; set; }
-        public short Player5Card1 { get; set; }
-        public short Player5Card2 { get; set; }
-        public short Player6Card1 { get; set; }
-        public short Player6Card2 { get; set; }
-        public short Player7Card1 { get; set; }
-        public short Player7Card2 { get; set; }
-        public short Player8Card1 { get; set; }
-        public short Player8Card2 { get; set; }
+        public short? Player5Card1 { get; set; }
+        public short? Player5Card2 { get; set; }
+        public short? Player6Card1 { get; set; }
+        public short? Player6Card2 { get; set; }
+        public short? Player7Card1 { get; set; }
+        public short? Player7Card2 { get; set; }
+        public short? Player8Card1 { get; set; }
+        public short? Player8Card2 { get; set; }
         public short Flop1 { get; set; }
         public short Flop2 { get; set; }
         public short Flop3 { get; set; }
         public short Turn { get; set; }
-        public short River1 { get; set; }
-        public short River2 { get; set; }
-        public short River3 { get; set; }
-        public short River4 { get; set; }
-        public short River5 { get; set; }
-        public short River6 { get; set; }
-        public short River7 { get; set; }
-        public short River8 { get; set; }
+        public short? River1 { get; set; }
+        public short? River2 { get; set; }
+        public short? River3 { get; set; }
+        public short? River4 { get; set; }
+        public short? River5 { get; set; }
+        public short? River6 { get; set; }
+        public short? River7 { get; set; }
+        public short? River8 { get; set; }
         public string CoefficientsStep1 { get; set; }
         public string CoefficientsStep2 { get; set; }
         public string CoefficientsStep3 { get; set; }
