@@ -40,7 +40,7 @@ namespace Domain
         public string Winner1 { get; set; }
         public string Winner2 { get; set; }
         public short Winning1 { get; set; }
-        public short Winning2 { get; set; }
+        public short? Winning2 { get; set; }
 
         [ForeignKey("Winning1")]
         public virtual Winning Winning1_base { get; set; }
