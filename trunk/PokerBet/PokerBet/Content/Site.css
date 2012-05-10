@@ -131,7 +131,7 @@ body
 
 .ui-progress-bar {
 	margin-left: 0px;
-	margin-top:-20px;
+	margin-top: -20px;
 	z-index:16;
 }
 
@@ -445,14 +445,14 @@ body
 
 .red
 {
-	color:#D92222
+	color:#D92222;
 }
 
 .tableCSS
 { 
     background:#3a3736;
-    width:467;
-    height:262;
+    width:467px;
+    height:262px;
     -webkit-border-radius: 131px;
     -moz-border-radius: 131px;
     border-radius: 131px;
@@ -463,8 +463,8 @@ body
 {
     margin: 27px;
     background:#105012;
-    width:405;
-    height:200;
+    width:405px;
+    height:200px;
     -webkit-border-radius: 100px;
     -moz-border-radius: 100px;
     border-radius: 100px;
