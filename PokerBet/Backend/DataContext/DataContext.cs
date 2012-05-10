@@ -9,7 +9,7 @@ namespace Backend.DataContext
 {
     public class PokerBetContext : DbContext
     {
-        public DbSet<Card> Forums { get; set; }
+        public DbSet<Card> Cards { get; set; }
         public DbSet<Winning> Winnings { get; set; }
         public DbSet<Game> Games { get; set; }
 

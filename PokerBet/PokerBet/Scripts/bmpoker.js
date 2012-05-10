@@ -99,7 +99,7 @@ var
 var 
 	chipClasses = new Array("chipBlue", "chipBlack", "chipYellow", "chipRed");
 function getStakes() {
-    $.ajax({ type: 'GET', url: 'http://inbet.cc:8080/pokerdata/stakes.json', data: '', timeout: 10000,
+    $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 10000,
         success: function (data) {
             try {
                 var json = eval('(' + data + ')');
@@ -144,7 +144,11 @@ function changeMain(data) {
         if (pbValue > 100) {
             pbValue = 100;
         }
+
+
         $('#progressbar .ui-progress').animateProgress(pbValue, null);
+
+
         var flop = 1;
         for (var table in json) {
             gameStep = 0;
@@ -257,9 +261,10 @@ function changeMain(data) {
 
 }
 function getHistory() {
-    $.ajax({ type: 'GET', url: 'http://inbet.cc:8080/pokerdata/phistory.json', dataType: 'json', timeout: 10000,
-        success: function (data) {
+    $.ajax({ type: 'GET', url: '/Home/Phistory', dataType: 'json', timeout: 10000,
+        complete: function (data) {
             try {
+                data = [["168372", "&nbsp;13,23,34"], ["168373", "&nbsp;13,22,25,36"], ["168374", "&nbsp;10,22,37"], ["168375", "&nbsp;12,21,22,34"], ["168376", "&nbsp;11,12,24,33"], ["168377", "&nbsp;10,21,34"], ["168378", "&nbsp;12,22,31"], ["168379", "&nbsp;10,22,35"]];
                 //alert(data);
                 //$('#logData').empty();
                 //var data = eval('(' + string + ')');
@@ -287,19 +292,17 @@ function getHistory() {
         }
     });
 }
+
 function getMain() {
-    $.ajax({ type: 'GET', url: 'http://inbet.cc:8080/pokerdata/main.json', data: '', timeout: 3000, async: false, dataType: 'json',
-        success: function (data) {
-            globalData = data;
+    $.ajax({ type: 'GET', url: '/Home/Main', data: '', timeout: 3000, async: false, dataType: 'json',
+        complete: function (data) {
+            globalData = { "three": { "playersNo": "8", "deskCards": "Tc Ac Qs", "players": { "6": { "K": "7.04", "cards": "Ts 9c", "id": "#three6", "V": "0.0791" }, "4": { "K": "11.45", "cards": "Th 5c", "id": "#three4", "V": "0.0260" }, "1": { "K": "12.73", "cards": "4s 8s", "id": "#three1", "V": "0.0573" }, "3": { "K": "20.29", "cards": "6h 9h", "id": "#three3", "V": "0.0289" }, "0": { "K": "8.36", "cards": "2s 2h", "id": "#three0", "V": "0.0971" }, "7": { "K": "2.19", "cards": "Qd 3c", "id": "#three7", "V": "0.2098" }, "2": { "K": "3.34", "cards": "4h Kh", "id": "#three2", "V": "0.2713" }, "5": { "K": "2.09", "cards": "Qc 5s", "id": "#three5", "V": "0.2306"}} }, "timestamp": 1336480326, "one": { "playersNo": "4", "deskCards": "6h Ks 5d", "players": { "1": { "K": "5.68", "cards": "Jh 3h", "id": "#one1", "V": "0.1707" }, "3": { "K": "3.51", "cards": "6c 2s", "id": "#one3", "V": "0.1604" }, "0": { "K": "1.72", "cards": "Qs 6s", "id": "#one0", "V": "0.4470" }, "2": { "K": "4.37", "cards": "8s Ac", "id": "#one2", "V": "0.2220"}} }, "two": { "playersNo": "6", "deskCards": "2d 2c 4s", "players": { "4": { "K": "13.06", "cards": "Js 4h", "id": "#two4", "V": "0.0308" }, "1": { "K": "13.06", "cards": "Ks 4c", "id": "#two1", "V": "0.0308" }, "3": { "K": "15.04", "cards": "3h 7h", "id": "#two3", "V": "0.0375" }, "0": { "K": "1.10", "cards": "8d 2s", "id": "#two0", "V": "0.8784" }, "2": { "K": "22.66", "cards": "3d Qc", "id": "#two2", "V": "0.0173" }, "5": { "K": "142.65", "cards": "Ts 7c", "id": "#two5", "V": "0.0053"}} }, "ts": "1336480367" };
             changeMain(globalData);
             //setTimeout(function() {pulse();}, 1000);
-        },
-        error: function () {
-            //setTimeout(function() {pulse();}, 1000);
-            //getMain();
         }
     });
 }
+
 function pulse() {
     $('#round').html(roundNo);
     getStakes();
@@ -320,9 +323,8 @@ function pulse() {
 }
 
 function getRound() {
-    $.ajax({ type: 'GET', url: 'http://inbet.cc:8080/pokerdata/round.mc', data: '', timeout: 10000,
+    $.ajax({ type: 'GET', url: '/Home/Round', data: '', timeout: 10000,
         success: function (data) {
-            //alert(data);
             if (deskCards == '5') {
                 data++;
             }
@@ -378,17 +380,15 @@ google.setOnLoadCallback(function () {
         });
         }
         */
-
-
     }, 1000);
 
     //pulse();
+
     loadProgressBar();
     $(function () {
         getHistory();
         $('#progressbar .ui-progress .ui-label').hide();
         $('#progressbar .ui-progress').css('width', '0%');
-
     });
 });
 
