@@ -12,6 +12,7 @@ namespace Backend.DataContext
         public DbSet<Card> Cards { get; set; }
         public DbSet<Winning> Winnings { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<GameState> GameStates { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

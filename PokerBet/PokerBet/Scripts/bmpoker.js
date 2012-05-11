@@ -144,8 +144,7 @@ function changeMain(data) {
         if (pbValue > 100) {
             pbValue = 100;
         }
-
-
+        
         $('#progressbar .ui-progress').animateProgress(pbValue, null);
 
 
@@ -294,9 +293,11 @@ function getHistory() {
 }
 
 function getMain() {
-    $.ajax({ type: 'GET', url: '/Home/Main', data: '', timeout: 3000, async: false, dataType: 'json',
+    $.ajax({ type: 'GET', url: '/Home/Main', data: '', timeout: 3000, async: false,
         complete: function (data) {
-            globalData = { "three": { "playersNo": "8", "deskCards": "Tc Ac Qs", "players": { "6": { "K": "7.04", "cards": "Ts 9c", "id": "#three6", "V": "0.0791" }, "4": { "K": "11.45", "cards": "Th 5c", "id": "#three4", "V": "0.0260" }, "1": { "K": "12.73", "cards": "4s 8s", "id": "#three1", "V": "0.0573" }, "3": { "K": "20.29", "cards": "6h 9h", "id": "#three3", "V": "0.0289" }, "0": { "K": "8.36", "cards": "2s 2h", "id": "#three0", "V": "0.0971" }, "7": { "K": "2.19", "cards": "Qd 3c", "id": "#three7", "V": "0.2098" }, "2": { "K": "3.34", "cards": "4h Kh", "id": "#three2", "V": "0.2713" }, "5": { "K": "2.09", "cards": "Qc 5s", "id": "#three5", "V": "0.2306"}} }, "timestamp": 1336480326, "one": { "playersNo": "4", "deskCards": "6h Ks 5d", "players": { "1": { "K": "5.68", "cards": "Jh 3h", "id": "#one1", "V": "0.1707" }, "3": { "K": "3.51", "cards": "6c 2s", "id": "#one3", "V": "0.1604" }, "0": { "K": "1.72", "cards": "Qs 6s", "id": "#one0", "V": "0.4470" }, "2": { "K": "4.37", "cards": "8s Ac", "id": "#one2", "V": "0.2220"}} }, "two": { "playersNo": "6", "deskCards": "2d 2c 4s", "players": { "4": { "K": "13.06", "cards": "Js 4h", "id": "#two4", "V": "0.0308" }, "1": { "K": "13.06", "cards": "Ks 4c", "id": "#two1", "V": "0.0308" }, "3": { "K": "15.04", "cards": "3h 7h", "id": "#two3", "V": "0.0375" }, "0": { "K": "1.10", "cards": "8d 2s", "id": "#two0", "V": "0.8784" }, "2": { "K": "22.66", "cards": "3d Qc", "id": "#two2", "V": "0.0173" }, "5": { "K": "142.65", "cards": "Ts 7c", "id": "#two5", "V": "0.0053"}} }, "ts": "1336480367" };
+
+            globalData = $.parseJSON(data.responseText);
+            //globalData = {'three':{'playersNo':'8','deskCards':'Qh Qd 5c 2d 3h','BH':'Straight','players':{'6':{'K':'0.97','cards':'4h 6d','id':'#three6','V':'1.0000'},'4':{'K':'0','cards':'3c 5s','id':'#three4','V':'0.0000'},'1':{'K':'0','cards':'As Qs','id':'#three1','V':'0.0000'},'3':{'K':'0','cards':'Jc 9s','id':'#three3','V':'0.0000'},'0':{'K':'0','cards':'Kh 2c','id':'#three0','V':'0.0000'},'7':{'K':'0','cards':'Ts Kd','id':'#three7','V':'0.0000'},'2':{'K':'0','cards':'4c Ad','id':'#three2','V':'0.0000'},'5':{'K':'0','cards':'4d 2h','id':'#three5','V':'0.0000'}}},'timestamp':1336736106,'one':{'playersNo':'4','deskCards':'Ac Qs 4s 2d 8d','BH':'OnePair','players':{'1':{'K':'0.97','cards':'5d Qd','id':'#one1','V':'1.0000'},'3':{'K':'0','cards':'7h 8s','id':'#one3','V':'0.0000'},'0':{'K':'0','cards':'Kh 6d','id':'#one0','V':'0.0000'},'2':{'K':'0','cards':'Ts Js','id':'#one2','V':'0.0000'}}},'two':{'playersNo':'6','deskCards':'Ks 2h 5c 3d 2s','BH':'Trips','players':{'4':{'K':'0.97','cards':'2d 9h','id':'#two4','V':'1.0000'},'1':{'K':'0','cards':'7d 5s','id':'#two1','V':'0.0000'},'3':{'K':'0','cards':'8c 3h','id':'#two3','V':'0.0000'},'0':{'K':'0','cards':'Jd Qs','id':'#two0','V':'0.0000'},'2':{'K':'0','cards':'Ts 9d','id':'#two2','V':'0.0000'},'5':{'K':'0','cards':'3s 5h','id':'#two5','V':'0.0000'}}},'ts':'1336736118'};
             changeMain(globalData);
             //setTimeout(function() {pulse();}, 1000);
         }
