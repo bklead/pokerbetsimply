@@ -13,8 +13,9 @@ namespace Backend
         private PokerBetContext context = new PokerBetContext();
 
         private IPokerBetFacade pokerFacade;
+        private IAdminFacade adminFacade;
 
-        public IPokerBetFacade AdminSrvc
+        public IPokerBetFacade PokerBetSrvc
         {
             get
             {
@@ -23,6 +24,18 @@ namespace Backend
                     pokerFacade = new PokerBetFacade(context);
                 }
                 return pokerFacade;
+            }
+        }
+
+        public IAdminFacade AdminSrvc
+        {
+            get
+            {
+                if (adminFacade == null)
+                {
+                    adminFacade = new AdminFacade(context);
+                }
+                return adminFacade;
             }
         }
 

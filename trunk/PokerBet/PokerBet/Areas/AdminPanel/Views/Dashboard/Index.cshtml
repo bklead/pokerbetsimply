@@ -1,0 +1,62 @@
+﻿@model PokerBet.Areas.AdminPanel.Models.GamesModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-1.5.1.min.js" type="text/javascript"></script>
+    <script src="/Scripts/modernizr-1.7.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".curr-game").change(function () {
+                window.location.href = "/AdminPanel/Dashboard/Index?id=" + $(this).val();
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="mainddesk"></div>
+<div class="main">
+<div id="header"> 
+<img src="/images/head.png" alt=""/>
+</div>
+
+<div class="admin-edit">
+@using(Html.BeginForm("Save","Dashboard",FormMethod.Post))
+{
+    <div class="game-edit">
+    <label>Game</label>
+    @Html.DropDownListFor(p => p.CurrentGame, Model.Games, new {@class="curr-game" })
+    </div>
+    for (int i = 0; i < Model.GameEditModel.Count; i++)
+    {
+    <div class="game-edit">
+        <div class="admin-yellow">Game @(i+1)</div>
+        <div>Number of Players <span class="admin-yellow">@(2*(i+2))</span></div>
+    
+        @Html.LabelFor(p => p.GameEditModel[i].River2)
+        @Html.DropDownListFor(p => p.GameEditModel[i].River2, Model.GameEditModel[i].Cards)
+
+        @Html.LabelFor(p => p.GameEditModel[i].Winner2)
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winner2, Model.GameEditModel[i].Winners)
+
+        @Html.LabelFor(p => p.GameEditModel[i].Winning2)
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winning2, Model.GameEditModel[i].Winnings)
+        
+    </div>
+    }
+    <input type="submit" value="Save Games" />
+
+}
+
+</div>
+</div>
+</body>
+</html>

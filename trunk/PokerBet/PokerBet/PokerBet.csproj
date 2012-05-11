@@ -65,6 +65,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\AdminPanel\AdminPanelAreaRegistration.cs" />
+    <Compile Include="Areas\AdminPanel\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\AdminPanel\Models\AdminModels.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PokerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -138,6 +141,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\AdminPanel\Views\Shared\" />
     <Folder Include="images\" />
     <Folder Include="Models\" />
   </ItemGroup>
@@ -156,6 +160,12 @@
       <Project>{CF265A10-1329-4032-87A2-B882589E0592}</Project>
       <Name>Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\AdminPanel\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\AdminPanel\Views\Dashboard\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
