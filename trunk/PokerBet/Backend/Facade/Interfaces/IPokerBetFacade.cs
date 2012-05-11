@@ -9,6 +9,10 @@ namespace Backend.Facade.Interfaces
     public interface IPokerBetFacade
     {
         Game GetGame();
+        Game[] GetTable(out short state);
         Card GetCardByID(short id);
+        String GetCardNameByID(short id);
+
+        GameState GetCurrentState();
     }
 }
