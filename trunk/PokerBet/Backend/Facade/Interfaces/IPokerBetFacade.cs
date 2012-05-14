@@ -10,6 +10,7 @@ namespace Backend.Facade.Interfaces
     {
         Game GetGame();
         Game[] GetTable(out short state);
+        Game[] GetTableById(int id);
         Card GetCardByID(short id);
         String GetCardNameByID(short id);
 

@@ -144,7 +144,7 @@ function changeMain(data) {
         if (pbValue > 100) {
             pbValue = 100;
         }
-        
+
         $('#progressbar .ui-progress').animateProgress(pbValue, null);
 
 
@@ -292,8 +292,14 @@ function getHistory() {
     });
 }
 
+function getURLParameter(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]
+    );
+}
+
 function getMain() {
-    $.ajax({ type: 'GET', url: '/Home/Main', data: { isStatic : 'false'}, timeout: 3000, async: false,
+    $.ajax({ type: 'GET', url: '/Home/Main', data: { isStatic: 'true', id: getURLParameter("id") }, timeout: 3000, async: false,
         complete: function (data) {
 
             globalData = $.parseJSON(data.responseText);
