@@ -18,6 +18,11 @@ body
     bottom: 0; 
 }
 
+.clear
+{
+    clear:both;
+}
+
 .mainddesk 
 {
 	z-index: -1; 
@@ -496,5 +501,35 @@ body
     top:80px;
     left:-20px;
     font-size:120%;
+}
+
+
+/**********AdminPanel*************/
+
+.main
+{
+    width:60%;
+    margin:0 auto;
+    z-index:1;
+}
+
+.admin-edit
+{
+    color:White;
+}
+
+.admin-edit .game-edit
+{
+    padding-bottom:30px;
+}
+
+.admin-edit .game-edit:first-child
+{
+    padding-top:20px;
+}
+
+.admin-yellow
+{
+    color:Yellow;
 }
 

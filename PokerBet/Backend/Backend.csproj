@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext\DataContext.cs" />
+    <Compile Include="Facade\Implementations\AdminFacade.cs" />
     <Compile Include="Facade\Implementations\PokerBetFacade.cs" />
+    <Compile Include="Facade\Interfaces\IAdminFacade.cs" />
     <Compile Include="Facade\Interfaces\IPokerBetFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />

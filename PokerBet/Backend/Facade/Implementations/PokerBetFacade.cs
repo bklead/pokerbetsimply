@@ -84,6 +84,11 @@ namespace Backend.Facade.Implementations
             return games;
         }
 
+        public Game[] GetTableById(int id)
+        {
+            return ctx.Games.OrderBy(p=>p.Id).Skip(id*3).Take(3).OrderBy(m => m.NumberOfPlayers).ToArray();   
+        }
+
         private GameState SetState(GameState state)
         {
             ctx.GameStates.Add(state);

@@ -38,11 +38,24 @@ namespace PokerBet.Controllers
         }
          
 
-        public ActionResult Main()
+        public ActionResult Main(bool isStatic,int? id)
         {
             short state;
-            var table = Unit.AdminSrvc.GetTable(out state);
-            var currentGameState = Unit.AdminSrvc.GetCurrentState();
+            Game[] table;
+            GameState currentGameState;
+            if (isStatic)
+            {
+                if (id == null) id = 0;
+                table = Unit.PokerBetSrvc.GetTableById(id.Value);
+                state = 3;
+                currentGameState = Unit.PokerBetSrvc.GetCurrentState();
+            }
+            else
+            {
+                table = Unit.PokerBetSrvc.GetTable(out state);
+                currentGameState = Unit.PokerBetSrvc.GetCurrentState();
+            }
+
 
             JObject mainJson = 
             new JObject(
@@ -81,15 +94,18 @@ namespace PokerBet.Controllers
                 }
             }
 
-            var gamejson =
-            new JProperty(table, new JObject(
+            var gameJobject = new JObject(
                 new JProperty("playersNo", game.NumberOfPlayers.ToString()),
                 new JProperty("deskCards", GetDesk(game, state)),                
                 new JProperty("players", players)
-            ));
+            );
 
-            //if (state == 3)
-            //    gamejson.Add(new JProperty("BH", game.Winning1_base.Name));
+            if (state == 3)
+            gameJobject.Add(new JProperty("BH", game.Winning1_base.Name));
+
+            var gamejson =
+            new JProperty(table, gameJobject);
+
 
             return gamejson;
         }
@@ -137,10 +153,8 @@ namespace PokerBet.Controllers
 
         private string GetCardById(short id)
         {
-            return Unit.AdminSrvc.GetCardNameByID(id);
+            return Unit.PokerBetSrvc.GetCardNameByID(id);
         }
-
-
 
         public ActionResult Round()
         {
