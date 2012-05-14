@@ -1,4 +1,5 @@
 ﻿@model PokerBet.Areas.AdminPanel.Models.GamesModel
+@using PokerBet.Helpers
 
 @{
     ViewBag.Title = "Index";
@@ -32,24 +33,77 @@
     <label>Game</label>
     @Html.DropDownListFor(p => p.CurrentGame, Model.Games, new {@class="curr-game" })
     </div>
-    for (int i = 0; i < Model.GameEditModel.Count; i++)
-    {
-    <div class="game-edit">
-        <div class="admin-yellow">Game @(i+1)</div>
-        <div>Number of Players <span class="admin-yellow">@(2*(i+2))</span></div>
-    
-        @Html.LabelFor(p => p.GameEditModel[i].River2)
-        @Html.DropDownListFor(p => p.GameEditModel[i].River2, Model.GameEditModel[i].Cards)
-
-        @Html.LabelFor(p => p.GameEditModel[i].Winner2)
-        @Html.DropDownListFor(p => p.GameEditModel[i].Winner2, Model.GameEditModel[i].Winners)
-
-        @Html.LabelFor(p => p.GameEditModel[i].Winning2)
-        @Html.DropDownListFor(p => p.GameEditModel[i].Winning2, Model.GameEditModel[i].Winnings)
+    <table class="admin-edit-table">
+    <tr>
+    <td></td>
+        <td>River Card</td>
+        <td>Winner</td>
+        <td>Winning</td>
+    </tr>
+    @for (int i = 0; i < Model.GameEditModel.Count; i++)
+    {   
+        <tr>
+        <td>Game @(i+1)<br />Number of Players <span class="admin-yellow">@(2*(i+2))</span></td>
+        </tr>
         
-    </div>
+        <tr>
+        <td>
+        2
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].River2, Model.GameEditModel[i].Cards.SelectItem(Model.GameEditModel[i].River2 == null ? "" : Model.GameEditModel[i].River2.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winner2, Model.GameEditModel[i].Winners.SelectItem(Model.GameEditModel[i].Winner2 == null ? "" : Model.GameEditModel[i].Winner2.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winning2, Model.GameEditModel[i].Winnings.SelectItem(Model.GameEditModel[i].Winning2 == null ? "" : Model.GameEditModel[i].Winning2.ToString()))
+        </td>
+        </tr>
+        
+        if (i > 0)
+        {
+        <tr>
+        <td>
+        3
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].River3, Model.GameEditModel[i].Cards.SelectItem(Model.GameEditModel[i].River3 == null ? "" : Model.GameEditModel[i].River3.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winner3, Model.GameEditModel[i].Winners.SelectItem(Model.GameEditModel[i].Winner3 == null ? "" : Model.GameEditModel[i].Winner3.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winning3, Model.GameEditModel[i].Winnings.SelectItem(Model.GameEditModel[i].Winning3 == null ? "" : Model.GameEditModel[i].Winning3.ToString()))
+        </td>
+        </tr>
+        }
+        
+        if (i > 1)
+        {
+        <tr>
+        <td>
+        4
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].River4, Model.GameEditModel[i].Cards.SelectItem(Model.GameEditModel[i].River4 == null ? "" : Model.GameEditModel[i].River4.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winner4, Model.GameEditModel[i].Winners.SelectItem(Model.GameEditModel[i].Winner4 == null ? "" : Model.GameEditModel[i].Winner4.ToString()))
+        </td>
+        <td>
+        @Html.DropDownListFor(p => p.GameEditModel[i].Winning4, Model.GameEditModel[i].Winnings.SelectItem(Model.GameEditModel[i].Winning4 == null ? "" : Model.GameEditModel[i].Winning4.ToString()))
+        </td>
+        </tr>
+        
+        <tr>
+        <td colspan="4">
+        <input type="submit" value="Save Games" style="float:right;" /></td>
+        </tr>
+        }
+        
     }
-    <input type="submit" value="Save Games" style="z-index:100;" />
+    </table>
 
 }
 
