@@ -141,6 +141,7 @@ function changeMain(data) {
         //var json = eval('('+data+')');
         json = data;
         pbValue = json['ts'] - json['timestamp']; pbValue = Math.round(pbValue / 0.60);
+        //pbValue = json['timestamp']; pbValue = Math.round(pbValue / 0.60);
         if (pbValue > 100) {
             pbValue = 100;
         }
@@ -165,7 +166,7 @@ function changeMain(data) {
                     if (deskCards[i].charAt(0) == 'T') cardNum = 10;
                     else cardNum = deskCards[i].charAt(0);
 
-                    deskCardsHTML += '<div   style="display:none;margin-left:1px; margin-top: 3.6px;width:42px" class="deskCards cart"><div class="num">' + cardNum + '</div><div class="lear ' + learsClass[deskCards[i].charAt(1)] + '" >' + lears[deskCards[i].charAt(1)] + '</div></div>';
+                    deskCardsHTML += '<div style="display:none;margin-left:1px; margin-top: 3.6px;width:42px" class="deskCards cart"><div class="num">' + cardNum + '</div><div class="lear ' + learsClass[deskCards[i].charAt(1)] + '" >' + lears[deskCards[i].charAt(1)] + '</div></div>';
                     gameStep++;
                 }
                 var key = '#' + table + 'Desk';

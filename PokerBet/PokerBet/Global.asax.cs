@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Timers;
+using Backend;
 
 namespace PokerBet
 {
@@ -35,6 +37,18 @@ namespace PokerBet
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            timer_Elapsed(null, null);
+
+            Timer timer = new Timer(60000);
+            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            timer.Enabled = true;
+            timer.Start();
+        }
+
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            new UnitOfWork().PokerBetSrvc.ChangeGameState();
         }
     }
 }

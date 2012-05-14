@@ -23,63 +23,81 @@ namespace Backend.Facade.Implementations
             return ctx.Games.FirstOrDefault();
         }
 
+        //public Game[] GetTable(out short state)
+        //{
+        //    state = 0;
+        //    var current = ctx.GameStates.FirstOrDefault();
+        //    Game[] games = null;
+
+        //    if (current == null)
+        //    {
+        //        games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+        //        SetState(new GameState()
+        //        {
+        //            Table4PlayerId = games[0].Id,
+        //            Table6PlayerId = games[1].Id,
+        //            Table8PlayerId = games[2].Id,
+        //            State = 0,
+        //            StartTime = DateTime.Now
+        //        });
+        //    }
+        //    else
+        //    {
+        //        if (true)
+        //        {
+        //            games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
+        //            state = current.State;
+        //        }
+        //        else
+        //        {
+        //            if (current.State != 3)
+        //            {
+        //                state = ++current.State;
+        //                current.StartTime = DateTime.Now;
+        //                games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
+        //            }
+        //            else
+        //            {
+        //                games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+        //                SetState(new GameState()
+        //                {
+        //                    Table4PlayerId = games[0].Id,
+        //                    Table6PlayerId = games[1].Id,
+        //                    Table8PlayerId = games[2].Id,
+        //                    State = 0,
+        //                    StartTime = DateTime.Now
+        //                });
+        //                ctx.Entry(current).State = EntityState.Deleted;
+        //            }
+        //        }
+        //    }
+
+        //    try
+        //    {
+        //        ctx.SaveChanges();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+
+        //    return games;
+        //}
+
         public Game[] GetTable(out short state)
         {
             state = 0;
             var current = ctx.GameStates.FirstOrDefault();
-            Game[] games = null;
+            Game[] games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
+            state = current.State;
 
-            if (current == null)
-            {
-                games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
-                SetState(new GameState()
-                {
-                    Table4PlayerId = games[0].Id,
-                    Table6PlayerId = games[1].Id,
-                    Table8PlayerId = games[2].Id,
-                    State = 0,
-                    StartTime = DateTime.Now
-                });
-            }
-            else
-            {
-                if ((DateTime.Now - current.StartTime).TotalSeconds < 59)
-                {
-                    games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
-                    state = current.State;
-                }
-                else
-                {
-                    if (current.State != 3)
-                    {
-                        state = ++current.State;
-                        current.StartTime = DateTime.Now;
-                        games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
-                    }
-                    else
-                    {
-                        games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
-                        SetState(new GameState()
-                        {
-                            Table4PlayerId = games[0].Id,
-                            Table6PlayerId = games[1].Id,
-                            Table8PlayerId = games[2].Id,
-                            State = 0,
-                            StartTime = DateTime.Now
-                        });
-                        ctx.Entry(current).State = EntityState.Deleted;
-                    }
-                }
-            }
+            return games;
+        }
 
-            try
-            {
-                ctx.SaveChanges();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        public Game[] GetTable()
+        {
+            var current = ctx.GameStates.FirstOrDefault();
+            Game[] games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
 
             return games;
         }
@@ -118,6 +136,58 @@ namespace Backend.Facade.Implementations
         public GameState GetCurrentState()
         {
             return ctx.GameStates.First();
+        }
+
+
+        public bool ChangeGameState()
+        {
+            var current = ctx.GameStates.FirstOrDefault();
+            Game[] games = null;
+
+            if (current == null)
+            {
+                games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                SetState(new GameState()
+                {
+                    Table4PlayerId = games[0].Id,
+                    Table6PlayerId = games[1].Id,
+                    Table8PlayerId = games[2].Id,
+                    State = 0,
+                    StartTime = DateTime.Now
+                });
+            }
+            else
+            {
+                if (current.State != 3)
+                {
+                    current.StartTime = DateTime.Now;
+                    current.State++;
+                    games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
+                }
+                else
+                {
+                    games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                    SetState(new GameState()
+                    {
+                        Table4PlayerId = games[0].Id,
+                        Table6PlayerId = games[1].Id,
+                        Table8PlayerId = games[2].Id,
+                        State = 0,
+                        StartTime = DateTime.Now
+                    });
+                    ctx.Entry(current).State = EntityState.Deleted;
+                }
+            }
+
+            try
+            {
+                ctx.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
