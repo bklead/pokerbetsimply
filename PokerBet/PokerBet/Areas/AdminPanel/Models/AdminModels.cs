@@ -10,21 +10,17 @@ namespace PokerBet.Areas.AdminPanel.Models
 {
     public class GameEditModel
     {
-        [Required]
         [Display(Name = "Game Id")]
         public int GameId { get; set; }
-
-        [Required]
-        [Display(Name = "River Card")]
         public short? River2 { get; set; }
-
-        [Required]
-        [Display(Name = "Winner")]
         public string Winner2 { get; set; }
-
-        [Required]
-        [Display(Name = "Winning")]
         public short? Winning2 { get; set; }
+        public short? River3 { get; set; }
+        public string Winner3 { get; set; }
+        public short? Winning3 { get; set; }
+        public short? River4 { get; set; }
+        public string Winner4 { get; set; }
+        public short? Winning4 { get; set; }
 
         public List<SelectListItem> Cards { get; set; }
         public List<SelectListItem> Winnings { get; set; }

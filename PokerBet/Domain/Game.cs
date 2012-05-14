@@ -34,20 +34,32 @@ namespace Domain
         public short Flop2 { get; set; }
         public short Flop3 { get; set; }
         public short Turn { get; set; }
-        public short? River1 { get; set; }
+        public short River1 { get; set; }
         public short? River2 { get; set; }
+        public short? River3 { get; set; }
+        public short? River4 { get; set; }
         public string CoefficientsStep1 { get; set; }
         public string CoefficientsStep2 { get; set; }
         public string CoefficientsStep3 { get; set; }
         public string Winner1 { get; set; }
         public string Winner2 { get; set; }
+        public string Winner3 { get; set; }
+        public string Winner4 { get; set; }
         public short Winning1 { get; set; }
         public short? Winning2 { get; set; }
+        public short? Winning3 { get; set; }
+        public short? Winning4 { get; set; }
 
         [ForeignKey("Winning1")]
         public virtual Winning Winning1_base { get; set; }
 
         [ForeignKey("Winning2")]
         public virtual Winning Winning2_base { get; set; }
+
+        [ForeignKey("Winning3")]
+        public virtual Winning Winning3_base { get; set; }
+
+        [ForeignKey("Winning4")]
+        public virtual Winning Winning4_base { get; set; }
     }
 }

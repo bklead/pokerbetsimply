@@ -533,3 +533,16 @@ body
     color:Yellow;
 }
 
+.admin-edit-table td
+{
+    padding:5px 20px;
+}
+
+.admin-edit-table
+{
+   color:White;
+}
+
+
+
+

@@ -32,13 +32,13 @@ namespace PokerBet.Areas.AdminPanel.Controllers
                 listCards.Add(new SelectListItem { Text = "", Value = null });
                 foreach (Card card in cards)
                 {
-                    listCards.Add(new SelectListItem { Text = card.Name, Value = card.Id.ToString(), Selected = card.Id==game.River2 ? true :false });
+                    listCards.Add(new SelectListItem { Text = card.Name, Value = card.Id.ToString()});
                 }
                 List<SelectListItem> listWinnings = new List<SelectListItem>();
                 listWinnings.Add(new SelectListItem { Text = "", Value = null });
                 foreach (Winning winning in winnings)
                 {
-                    listWinnings.Add(new SelectListItem { Text = winning.Name, Value = winning.Id.ToString(), Selected = winning.Id == game.Winning2 ? true : false });
+                    listWinnings.Add(new SelectListItem { Text = winning.Name, Value = winning.Id.ToString()});
                 }
 
                 List<string> winners = GetAllPossibleCombinations(game.NumberOfPlayers);
@@ -46,7 +46,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
                 listWinners.Add(new SelectListItem { Text = "", Value = null });
                 foreach (string winner in winners)
                 {
-                    listWinners.Add(new SelectListItem { Text = winner, Value = winner, Selected = winner == game.Winner2 ? true : false });
+                    listWinners.Add(new SelectListItem { Text = winner, Value = winner });
                 }
 
                 model.Add(new GameEditModel
@@ -57,7 +57,13 @@ namespace PokerBet.Areas.AdminPanel.Controllers
                     GameId=game.Id,
                     River2=game.River2,
                     Winner2 = game.Winner2,
-                    Winning2 = game.Winning2
+                    Winning2 = game.Winning2,
+                    River3 = game.River3,
+                    Winner3 = game.Winner3,
+                    Winning3 = game.Winning3,
+                    River4 = game.River4,
+                    Winner4 = game.Winner4,
+                    Winning4 = game.Winning4
                 });
             }
 
@@ -84,7 +90,9 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         {
             for (int i = 0; i < model.GameEditModel.Count; i++)
             {
-                Unit.AdminSrvc.SaveValues(model.CurrentGame, i, model.GameEditModel[i].River2.Value, model.GameEditModel[i].Winner2, model.GameEditModel[i].Winning2.Value);
+                Unit.AdminSrvc.SaveValues(model.CurrentGame, i, model.GameEditModel[i].River2, model.GameEditModel[i].Winner2, model.GameEditModel[i].Winning2,
+                    model.GameEditModel[i].River3, model.GameEditModel[i].Winner3, model.GameEditModel[i].Winning3,
+                    model.GameEditModel[i].River4, model.GameEditModel[i].Winner4, model.GameEditModel[i].Winning4);
             }
 
             return RedirectToAction("Index", new { id=model.CurrentGame });

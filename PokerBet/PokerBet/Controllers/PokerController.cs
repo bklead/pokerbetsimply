@@ -42,13 +42,13 @@ namespace PokerBet.Controllers
         {
             short state;
             Game[] table;
-            GameState currentGameState;
+            GameState currentGameState = new GameState();
             if (isStatic)
             {
                 if (id == null) id = 0;
                 table = Unit.PokerBetSrvc.GetTableById(id.Value);
                 state = 3;
-                currentGameState = Unit.PokerBetSrvc.GetCurrentState();
+               // currentGameState = Unit.PokerBetSrvc.GetCurrentState();
             }
             else
             {
@@ -60,7 +60,7 @@ namespace PokerBet.Controllers
             JObject mainJson = 
             new JObject(
                 CreateGameJSON(table[2], state),
-                new JProperty("timestamp", currentGameState.StartTime.Second),
+                new JProperty("timestamp", currentGameState==null ? 0 : currentGameState.StartTime.Second),
                 CreateGameJSON(table[0], state),
                 CreateGameJSON(table[1], state),
                 new JProperty("ts", DateTime.Now.Second)
@@ -131,7 +131,7 @@ namespace PokerBet.Controllers
             {
                 case 3:
                     {
-                        desk = game.River1.HasValue ? " " + GetCardById(game.River1.Value) : "";
+                        desk = " " + GetCardById(game.River1);
                         goto case 2;
                     }
                 case 2:
