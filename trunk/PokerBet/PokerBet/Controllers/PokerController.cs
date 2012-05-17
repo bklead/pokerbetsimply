@@ -36,7 +36,10 @@ namespace PokerBet.Controllers
         {
             return Json("[['168371','&nbsp;11,22,34,36'],['168372','&nbsp;13,23,34'],['168373','&nbsp;13,22,25,36'],['168374','&nbsp;10,22,37'],['168375','&nbsp;12,21,22,34'],['168376','&nbsp;11,12,24,33'],['168377','&nbsp;10,21,34'],['168378','&nbsp;12,22,31']]", JsonRequestBehavior.AllowGet);
         }
-         
+
+        
+ 
+
 
         public ActionResult Main(bool isStatic,int? id)
         {
@@ -71,7 +74,32 @@ namespace PokerBet.Controllers
 
         private JProperty CreateGameJSON(Game game, int state)
         {
-            var coefficients = game.CoefficientsStep1.Split(',');
+            string[] coefficients = new string[game.NumberOfPlayers];
+            switch (state)
+            {
+                case 0:
+                    {
+                        coefficients = game.CoefficientsStep1.Split(','); break;
+                    }
+                case 1:
+                    {
+                        coefficients = game.CoefficientsStep2.Split(','); break;
+                    }
+                case 2:
+                    {
+                        coefficients = game.CoefficientsStep3.Split(','); break;
+                    }
+                case 3:
+                    {
+                        var winners = game.Winner1.Split(',');
+                        for (int i = 0; i < game.NumberOfPlayers; i++)
+                        {
+                            coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
+                        }
+                        break;
+                    }
+
+            }
             var table = TableNumber[game.NumberOfPlayers];
 
             var players = new JObject();
