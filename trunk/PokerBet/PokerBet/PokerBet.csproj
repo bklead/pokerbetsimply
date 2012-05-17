@@ -40,6 +40,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OnBarcode.Barcode.ASPNET">
+      <HintPath>..\packages\OnBarcode.Barcode.ASPNET.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -70,12 +73,15 @@
     <Compile Include="Areas\AdminPanel\Models\AdminModels.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PokerController.cs" />
+    <Compile Include="Controllers\CheckController.cs" />
     <Compile Include="Controllers\StakeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckModel.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilits\Barcode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css.css" />
@@ -108,6 +114,18 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\barcode.png" />
+    <Content Include="images\bg1.png" />
+    <Content Include="images\bkleaderlogo.png" />
+    <Content Include="images\chipBlack.png" />
+    <Content Include="images\chipBlue.png" />
+    <Content Include="images\chipRed.png" />
+    <Content Include="images\chipYellow.png" />
+    <Content Include="images\glow.png" />
+    <Content Include="images\head.png" />
+    <Content Include="images\round.png" />
+    <Content Include="images\status.png" />
+    <Content Include="images\table4.png" />
     <Content Include="Scripts\bmpoker-admin.js" />
     <Content Include="Scripts\engine_betting.js" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
@@ -145,10 +163,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="images\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -173,6 +188,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\AdminPanel\Views\Shared\_AdminLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Print\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stake\Index.cshtml" />
