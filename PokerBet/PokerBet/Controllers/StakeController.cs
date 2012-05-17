@@ -28,8 +28,7 @@ namespace PokerBet.Controllers
         {
             return View();
         }
-
-
+        
         public ActionResult CurrentRids()
         {
             short state;
