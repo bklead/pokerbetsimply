@@ -8,8 +8,10 @@ var
 	pbValue = 0;
 var 
 	deskCards;
-var 
+var
 	globalData;
+var 
+	currentRIDS;
 var lears = {
     's': '&spades;',
     'c': '&clubs;',
@@ -60,6 +62,39 @@ function loadProgressBar() {
         };
     })(jQuery);
 }
+
+
+function waitBox(info) {
+    if ($('#waitBox').length == 0) {
+        $('body').append('<div title="Регистрация" id="waitBox" style="display:none; z-index:9999;"></div>');
+        $('#waitBox').dialog({
+            modal: true,
+            autoOpen: false
+        });
+    }
+    $('#waitBox').html(info).dialog("open");
+}
+function unwaitBox() {
+    $('#waitBox').dialog("close");
+
+}
+function messageBox(info) {
+    if ($('#messageBox').length == 0) {
+        $('body').append('<div title="Регистрация" id="messageBox" style="display:none"></div>');
+        $('#messageBox').dialog({
+            modal: true,
+            autoOpen: false,
+            position: 'center',
+            buttons: {
+                "Okay": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+    $('#messageBox').html(info).dialog("open");
+}
+
 function number_format(number, decimals, dec_point, thousands_sep) {
     var n = !isFinite(+number) ? 0 : +number,
         prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
@@ -146,7 +181,7 @@ function changeMain(data) {
             pbValue = 100;
         }
         
-        $('#progressbar .ui-progress').animateProgress(pbValue, null);
+        $('#progress_bar .ui-progress').animateProgress(pbValue, null);
 
 
         var flop = 1;
@@ -186,6 +221,18 @@ function changeMain(data) {
                 prevGameStep = gameStep;
                 pgsTable = table;
                 flop = 0;
+                if (gameStep == 3) {
+                    $('.flop').addClass('card');
+                }
+                if (gameStep == 4) {
+                    $('.flop').addClass('card');
+                    $('.turn').addClass('card');
+                }
+                if (gameStep == 5) {
+                    $('.flop').addClass('card');
+                    $('.turn').addClass('card');
+                    $('.river').addClass('card');
+                }			
             } else {
                 $('#' + table + 'Desk').html('');
             }
@@ -217,14 +264,16 @@ function changeMain(data) {
                     }
                     playerName = playerName.replace('#', ''); playerName = playerName.replace('one', '1');
                     playerName = playerName.replace('two', '2'); playerName = playerName.replace('three', '3');
-                    var phClass = "item";
+                    var phClass = "item game-item";
+                    var phClassStake = "button black butSumm odd";
                     if (K == 0) {
                         if (gameStep == 5) {
                             K = "LOST";
                         } else {
                             K = "n/a";
                         }
-                        phClass = "itemLost";
+                        phClass = "itemLost game-item";
+                        phClassStake = "button rosy butSumm";
                     } else {
                         if (gameStep == 5 || K < 1) {
                             if (gameStep == 5) {
@@ -233,7 +282,8 @@ function changeMain(data) {
                             } else {
                                 K = "1.00";
                             }
-                            phClass = "itemWin";
+                            phClass = "itemWin game-item";
+                            phClassStake = "button green butSumm";
                             if (gameStep == 5) {
                                 if (winList[roundNo - 1] == null) {
                                     winList[roundNo - 1] = new Array();
@@ -245,13 +295,19 @@ function changeMain(data) {
                             K = "" + number_format(K, 2, '.');
                         }
                     }
-                    $(placeholder + 'K').html(K).attr('class', phClass);
+                    if ($(placeholder + 'K').hasClass("game-item")) {
+                        $(placeholder + 'K').html(K).attr('class', phClass);
+                    } else {
+                        $(placeholder + 'K').val(K).attr('class', phClassStake);
+                    }
+                    
                     $(placeholder + 'N').html(playerName);
                 }
             }
         }
         if (flop == 1) {
             $('#draw').html('Flop');
+            $('.card').removeClass('card');
             $('.glow').hide();
         }
     } catch (e) {
@@ -300,15 +356,23 @@ function getMain() {
             globalData = $.parseJSON(data.responseText);
             //globalData = {'three':{'playersNo':'8','deskCards':'Qh Qd 5c 2d 3h','BH':'Straight','players':{'6':{'K':'0.97','cards':'4h 6d','id':'#three6','V':'1.0000'},'4':{'K':'0','cards':'3c 5s','id':'#three4','V':'0.0000'},'1':{'K':'0','cards':'As Qs','id':'#three1','V':'0.0000'},'3':{'K':'0','cards':'Jc 9s','id':'#three3','V':'0.0000'},'0':{'K':'0','cards':'Kh 2c','id':'#three0','V':'0.0000'},'7':{'K':'0','cards':'Ts Kd','id':'#three7','V':'0.0000'},'2':{'K':'0','cards':'4c Ad','id':'#three2','V':'0.0000'},'5':{'K':'0','cards':'4d 2h','id':'#three5','V':'0.0000'}}},'timestamp':1336736106,'one':{'playersNo':'4','deskCards':'Ac Qs 4s 2d 8d','BH':'OnePair','players':{'1':{'K':'0.97','cards':'5d Qd','id':'#one1','V':'1.0000'},'3':{'K':'0','cards':'7h 8s','id':'#one3','V':'0.0000'},'0':{'K':'0','cards':'Kh 6d','id':'#one0','V':'0.0000'},'2':{'K':'0','cards':'Ts Js','id':'#one2','V':'0.0000'}}},'two':{'playersNo':'6','deskCards':'Ks 2h 5c 3d 2s','BH':'Trips','players':{'4':{'K':'0.97','cards':'2d 9h','id':'#two4','V':'1.0000'},'1':{'K':'0','cards':'7d 5s','id':'#two1','V':'0.0000'},'3':{'K':'0','cards':'8c 3h','id':'#two3','V':'0.0000'},'0':{'K':'0','cards':'Jd Qs','id':'#two0','V':'0.0000'},'2':{'K':'0','cards':'Ts 9d','id':'#two2','V':'0.0000'},'5':{'K':'0','cards':'3s 5h','id':'#two5','V':'0.0000'}}},'ts':'1336736118'};
             changeMain(globalData);
-            //setTimeout(function() {pulse();}, 1000);
         }
     });
 }
 
 function pulse() {
-    $('#round').html(roundNo);
-    getStakes();
-    getMain();
+
+    $.ajax({ type: 'GET', url: '/Stake/CurrentRids', data: '', timeout: 10000,
+        success: function (data) {
+            var json = eval('(' + data + ')');
+            currentRIDS = json;
+            drawShoppingCart();
+        }
+    });
+
+  //  $('#round').html(roundNo);
+   // getStakes();
+  //  getMain();
     /*   for(i=roundNo-1;i>0 && i>=roundNo-8;i--) {
     $('td.tdRound').each(function(idx, obj){
     if ($(obj).attr('round')==roundNo-i) {
@@ -341,8 +405,130 @@ function getRound() {
     });
 }
 
-google.load("jquery", "1.4.4");
-google.setOnLoadCallback(function () {
+function number_format(number, decimals, dec_point, thousands_sep) {
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
+}
+var clearPositionRedraw = true;
+function clearPosition(idx) {
+    if (shoppingCart[idx] !== null) {
+        var j = 0;
+        var newShoppingCart = new Array();
+        for (i = 0; i < shoppingCart.length; i++) {
+            if (i != idx) {
+                newShoppingCart[j] = shoppingCart[i];
+                j++;
+            }
+        }
+        shoppingCart = newShoppingCart;
+        if (clearPositionRedraw == true) {
+            drawShoppingCart();
+        }
+    }
+}
+function drawShoppingCart() {
+    var currentAmount = parseInt($('#totalSumm').val());
+    var currentPerAmount;
+    var expressOdd = 1;
+    var runningExpress = $('#buttonExpress').hasClass('orange');
+    if (shoppingCart.length != 0) {
+        currentPerAmount = currentAmount / shoppingCart.length;
+    } else {
+        currentPerAmount = 0;
+    }
+    currentPerAmount = number_format(currentPerAmount, 2, ".", " ");
+    positions2clear = new Array();
+    for (var idx in shoppingCart) {
+        var nameIDX = parseInt(idx) + 1;
+        $('#name' + nameIDX).val(shoppingCart[idx].replace(/[^0-9]/g, ''));
+        for (var rid in currentRIDS) {
+            if (currentRIDS[rid]['ridName'] == shoppingCart[idx]) {
+                $('#coef' + nameIDX).val(currentRIDS[rid]['odd0']);
+                if (runningExpress) {
+                    $('#summ' + nameIDX).val('');
+                    expressOdd *= parseFloat(currentRIDS[rid]['odd0']);
+                } else {
+                    $('#summ' + nameIDX).val(currentPerAmount);
+                }
+                if (currentRIDS[rid]['odd0'] == 0 || currentRIDS[rid]['odd0'] == 1) {
+                    positions2clear.push(idx);
+                }
+                break;
+            }
+        }
+    }
+    if (runningExpress) {
+        $('#express').val(number_format(expressOdd, 2, ".", ""));
+    } else {
+        $('#express').val('');
+    }
+    for (var idx = shoppingCart.length + 1; idx <= 5; idx++) {
+        $('#name' + idx).val('');
+        $('#coef' + idx).val('');
+        $('#summ' + idx).val('');
+    }
+    clearPositionRedraw = false;
+    for (var i = 0; i < positions2clear.length; i++) {
+        clearPosition(positions2clear[i]);
+    }
+    clearPositionRedraw = true;
+    if (shoppingCart.length == 0) {
+        if ($('#buttonExpress').hasClass('orange')) {
+            $('#buttonExpress').removeClass('orange').addClass('black');
+        }
+    }
+}
+function highlightExpress() {
+    if (isExpressPossible()) {
+        if ($('#buttonExpress').hasClass('gray')) {
+            $('#buttonExpress').removeClass('gray');
+        }
+    } else {
+        if (!$('#buttonExpress').hasClass('gray')) {
+            $('#buttonExpress').addClass('gray');
+        }
+    }
+}
+function isExpressPossible() {
+    if (shoppingCart.length > 1) {
+        var tbl = new Array();
+        tbl[1] = 0; tbl[2] = 0; tbl[3] = 0;
+        for (var idx in shoppingCart) {
+            var curName = parseInt(shoppingCart[idx].replace(/[^0-9]/g, ''));
+            if (curName >= 10 && curName < 20) { tbl[1]++; }
+            if (curName >= 20 && curName < 30) { tbl[2]++; }
+            if (curName >= 30 && curName < 40) { tbl[3]++; }
+        }
+        for (var idx in tbl) {
+            if (tbl[idx] > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+var shoppingCart = new Array();
+/*google.load("jquery", "1.4.4");
+google.load("jqueryui", "1.7.2");*/
+$(function () {
     $('#log').hide();
     //$('body').after('<div id="tmp"></div>');
     var mainLoop = setInterval(function () {
@@ -384,13 +570,104 @@ google.setOnLoadCallback(function () {
         */
     }, 1000);
 
+    $('.calc').live("click", function () {
+        var value = $(this).val();
+        if (/^[0-9]+$/.test(value)) {
+            // this is numeric button
+            var currentValue = parseInt($('#totalSumm').val());
+            currentValue += parseInt(value);
+            $('#totalSumm').val(currentValue);
+            drawShoppingCart();
+        } else if (value == "Clear") {
+            $('#totalSumm').val("0");
+        } else if (value == "Combi") {
+            if ($(this).hasClass('orange')) {
+                $(this).removeClass('orange').addClass('black');
+            } else if ($(this).hasClass('black')) {
+                if (isExpressPossible()) {
+                    $(this).removeClass('black').addClass('orange');
+                } else {
+                    messageBox('Экспресс возможен при условия выбора двух или более независимых событий');
+                }
+            }
+        } else if (value == "Print...") {
+            var value = parseInt($('#totalSumm').val());
+            if (/^[0-9]+$/.test(value) && parseInt(value) > 0 && shoppingCart.length > 0) {
+                $('#totalSumm').val("0");
+                waitBox('Подождите, идет регистрация ставки...');
+                // collecting 
+                //	sliptext = rid:value,rid:value,...
+                //	oddlist = odd0,odd0,odd0,...
+                //
+                if ($('#buttonExpress').hasClass('orange')) {
+                    //alert("generating mkSlipE.php");
+                } else {
+                    var sliptext = '';
+                    var oddlist = '';
+                    for (var idx in shoppingCart) {
+                        var scKey = shoppingCart[idx];
+                        var stakeValue = number_format(value / shoppingCart.length, 2, ".", "");
+                        for (var rid in currentRIDS) {
+                            if (currentRIDS[rid]['ridName'] == scKey) {
+                                sliptext += currentRIDS[rid]['RID'] + ":" + stakeValue + ",";
+                                oddlist += currentRIDS[rid]['odd0'] + ",";
+                                break;
+                            }
+                        }
+                    }
+                    //alert("registering mkSlip.php?slip="+sliptext+"&ol="+oddlist);
+                }
+                shoppingCart = new Array();
+                highlightExpress();
+                drawShoppingCart();
+            } else {
+                messageBox('??????? ????? ??????  ??? ???????? ???? ?? ???? ?????.');
+            }
+        }
+    });
+
+    $('.butDel').live("click", function () {
+        var idx = parseInt($(this).attr('id').replace(/[^0-9]/g, '')) - 1;
+        clearPosition(idx);
+        highlightExpress();
+    });
+
+    $('.odd').live("click", function () {
+        var myID = $(this).attr('id').replace(/K$/g, "").replace(/^one/g, "1").replace(/^two/g, "2").replace(/^three/, "3");
+        for (var rid in currentRIDS) {
+        if (currentRIDS[rid]['ridName'].replace(/[^0-9]/g, '') == myID) {
+        if (shoppingCart.indexOf(currentRIDS[rid]['ridName']) == -1) {
+        if (shoppingCart.length == 5) {
+        messageBox('Уже выбрано максимальное число исходов!');
+        } else {
+        shoppingCart.push(currentRIDS[rid]['ridName']);
+        if ($('#buttonExpress').hasClass('orange')) {
+        $('#buttonExpress').removeClass('orange').addClass('black');
+        }
+        drawShoppingCart();
+        highlightExpress();
+        }
+        } else {
+        messageBox('Игрок уже выбран!');
+        }
+        }
+        }
+    });
     //pulse();
 
     loadProgressBar();
     $(function () {
+        setInterval(function () { pulse(); }, 1000);
+        $('#totalSumm').val('0');
         getHistory();
         $('#progressbar .ui-progress .ui-label').hide();
         $('#progressbar .ui-progress').css('width', '0%');
+        $()
     });
 });
+
+
+
+
+
 

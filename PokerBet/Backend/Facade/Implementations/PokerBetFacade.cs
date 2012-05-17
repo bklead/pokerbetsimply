@@ -89,7 +89,7 @@ namespace Backend.Facade.Implementations
             state = 0;
             var current = ctx.GameStates.FirstOrDefault();
             Game[] games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
-            state = current.State;
+            state = current!=null ? current.State : Convert.ToInt16(0);
 
             return games;
         }
