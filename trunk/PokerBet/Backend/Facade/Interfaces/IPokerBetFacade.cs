@@ -19,6 +19,6 @@ namespace Backend.Facade.Interfaces
 
         GameState GetCurrentState();
 
-        GameBet[] GetGameBet();
+        GameBet[] GetGameBet(int id);
     }
 }

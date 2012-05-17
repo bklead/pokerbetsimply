@@ -191,9 +191,10 @@ namespace Backend.Facade.Implementations
         }
 
 
-        public GameBet[] GetGameBet()
+        public GameBet[] GetGameBet(int id)
         {
-            return ctx.GameBets.ToArray();
+            var bet = ctx.GameBets.Find(id);
+            return ctx.GameBets.Where(m => m.Event == bet.Event).ToArray();
         }
     }
 }

@@ -58,6 +58,14 @@ namespace PokerBet.Utilits
             this.CalculateChecksumDigit();
         }
 
+        public Ean13(string code)
+        {
+            this.CountryCode = code.Substring(0,2);
+            this.ManufacturerCode = code.Substring(2, 5);
+            this.ProductCode = code.Substring(7, 5);
+            this.CalculateChecksumDigit();
+        }
+
         public Ean13(string countryCode, string mfgNumber, string productId)
         {
             this.CountryCode = countryCode;
