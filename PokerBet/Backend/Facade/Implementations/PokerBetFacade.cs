@@ -189,5 +189,11 @@ namespace Backend.Facade.Implementations
                 return false;
             }
         }
+
+
+        public GameBet[] GetGameBet()
+        {
+            return ctx.GameBets.ToArray();
+        }
     }
 }

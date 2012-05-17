@@ -18,5 +18,7 @@ namespace Backend.Facade.Interfaces
         Boolean ChangeGameState();
 
         GameState GetCurrentState();
+
+        GameBet[] GetGameBet();
     }
 }
