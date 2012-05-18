@@ -175,7 +175,8 @@ function changeMain(data) {
     try {
         //var json = eval('('+data+')');
         json = data;
-        pbValue = json['ts'] - json['timestamp']; pbValue = Math.round(pbValue / 0.60);
+        //        pbValue = json['ts'] - json['timestamp']; pbValue = Math.round(pbValue / 0.60);
+        pbValue = json['ts']; pbValue = Math.round(pbValue / 0.60);
         //pbValue = json['timestamp']; pbValue = Math.round(pbValue / 0.60);
         if (pbValue > 100) {
             pbValue = 100;
@@ -466,7 +467,7 @@ function drawShoppingCart() {
                 } else {
                     $('#summ' + nameIDX).val(currentPerAmount);
                 }
-                if (currentRIDS[rid]['odd0'] == 0 || currentRIDS[rid]['odd0'] == 1) {
+                if (currentRIDS[rid]['odd0'] <= 1) {
                     positions2clear.push(idx);
                 }
                 break;
@@ -533,7 +534,7 @@ $(function () {
     //$('body').after('<div id="tmp"></div>');
     var mainLoop = setInterval(function () {
         //$('#round').html(roundNo);
-        if (globalData != undefined && (globalData.ts - globalData.timestamp) < 50) {
+        if (globalData != undefined && (globalData.ts) < 50) {
             globalData.ts++;
             changeMain(globalData);
         } else {
@@ -553,7 +554,7 @@ $(function () {
         }
         if (deskCards == '0') getHistory();
 
-        $('#tmp').html(deskCards + '   ' + (globalData.ts - globalData.timestamp));
+        $('#tmp').html(deskCards + '   ' + (globalData.ts));
         var j = 0;
         /*		for(i=roundNo-1;i>0 && i>=roundNo-8;i--) {
         $('td.tdRound').each(function(idx, obj){
@@ -592,6 +593,8 @@ $(function () {
             }
         } else if (value == "Print...") {
             var value = parseInt($('#totalSumm').val());
+            var playerList = '';
+            var oddList = '';
             if (/^[0-9]+$/.test(value) && parseInt(value) > 0 && shoppingCart.length > 0) {
                 $('#totalSumm').val("0");
                 waitBox('Подождите, идет регистрация ставки...');
@@ -602,19 +605,31 @@ $(function () {
                 if ($('#buttonExpress').hasClass('orange')) {
                     //alert("generating mkSlipE.php");
                 } else {
-                    var sliptext = '';
-                    var oddlist = '';
+                    playerList = '';
+                    oddList = '';
                     for (var idx in shoppingCart) {
                         var scKey = shoppingCart[idx];
                         var stakeValue = number_format(value / shoppingCart.length, 2, ".", "");
                         for (var rid in currentRIDS) {
                             if (currentRIDS[rid]['ridName'] == scKey) {
-                                sliptext += currentRIDS[rid]['RID'] + ":" + stakeValue + ",";
-                                oddlist += currentRIDS[rid]['odd0'] + ",";
+                                playerList += currentRIDS[rid]['ridName'].replace(/[^0-9]/g, '') + ",";
+                                oddList += currentRIDS[rid]['odd0'] + ",";
                                 break;
                             }
                         }
                     }
+
+                    $.ajax({ type: 'GET', url: '/Stake/Create', data: { playerList: playerList, oddList: oddList, sum: value }, timeout: 10000,
+                        success: function (data) {
+                            var json = eval('(' + data + ')');
+                            currentRIDS = json;
+                            drawShoppingCart();
+                            if (data != -1) {
+                                window.open("/Check/Index/" + data.toString(),'_blank');
+                            }
+                        }
+                    });
+
                     //alert("registering mkSlip.php?slip="+sliptext+"&ol="+oddlist);
                 }
                 shoppingCart = new Array();
@@ -635,22 +650,22 @@ $(function () {
     $('.odd').live("click", function () {
         var myID = $(this).attr('id').replace(/K$/g, "").replace(/^one/g, "1").replace(/^two/g, "2").replace(/^three/, "3");
         for (var rid in currentRIDS) {
-        if (currentRIDS[rid]['ridName'].replace(/[^0-9]/g, '') == myID) {
-        if (shoppingCart.indexOf(currentRIDS[rid]['ridName']) == -1) {
-        if (shoppingCart.length == 5) {
-        messageBox('Уже выбрано максимальное число исходов!');
-        } else {
-        shoppingCart.push(currentRIDS[rid]['ridName']);
-        if ($('#buttonExpress').hasClass('orange')) {
-        $('#buttonExpress').removeClass('orange').addClass('black');
-        }
-        drawShoppingCart();
-        highlightExpress();
-        }
-        } else {
-        messageBox('Игрок уже выбран!');
-        }
-        }
+            if (currentRIDS[rid]['ridName'].replace(/[^0-9]/g, '') == myID) {
+                if (shoppingCart.indexOf(currentRIDS[rid]['ridName']) == -1) {
+                    if (shoppingCart.length == 5) {
+                        messageBox('Уже выбрано максимальное число исходов!');
+                    } else {
+                        shoppingCart.push(currentRIDS[rid]['ridName']);
+                        if ($('#buttonExpress').hasClass('orange')) {
+                            $('#buttonExpress').removeClass('orange').addClass('black');
+                        }
+                        drawShoppingCart();
+                        highlightExpress();
+                    }
+                } else {
+                    messageBox('Игрок уже выбран!');
+                }
+            }
         }
     });
     //pulse();

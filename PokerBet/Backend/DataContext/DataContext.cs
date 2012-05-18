@@ -14,6 +14,7 @@ namespace Backend.DataContext
         public DbSet<Game> Games { get; set; }
         public DbSet<GameState> GameStates { get; set; }
         public DbSet<GameBet> GameBets { get; set; }
+        public DbSet<Constants> Constants { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
