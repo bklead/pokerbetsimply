@@ -66,7 +66,7 @@ namespace PokerBet.Controllers
                 new JProperty("timestamp", currentGameState==null ? 0 : currentGameState.StartTime.Second),
                 CreateGameJSON(table[0], state),
                 CreateGameJSON(table[1], state),
-                new JProperty("ts", DateTime.Now.Second)
+                new JProperty("ts", (DateTime.Now - currentGameState.StartTime).TotalSeconds)
             );
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));

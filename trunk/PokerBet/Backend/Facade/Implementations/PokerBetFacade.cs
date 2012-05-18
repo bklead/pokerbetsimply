@@ -194,7 +194,42 @@ namespace Backend.Facade.Implementations
         public GameBet[] GetGameBet(int id)
         {
             var bet = ctx.GameBets.Find(id);
-            return ctx.GameBets.Where(m => m.Event == bet.Event).ToArray();
+            return ctx.GameBets.Where(m => m.ContractNumber == bet.ContractNumber).ToArray();
+        }
+
+        public int? CreateStake(string[] playerList, string[] oddList, string sum)
+        {
+            try
+            {
+                Random random = new Random();
+                GameBet bet = new GameBet();
+                for (int i = 0; i < oddList.Length; i++)
+                {
+                    if (Convert.ToDouble(oddList[i]) > 1)
+                    {
+                        bet = new GameBet
+                        {
+                            Winner = Convert.ToInt32(playerList[i]),
+                            Index = Convert.ToDouble(oddList[i]),
+                            Sum = Convert.ToInt32(sum),
+                            StartDate = DateTime.Now,
+                            TableNumber = Convert.ToInt32(playerList[i].Substring(0, 1)),
+                            TableCode = 171588, //need to set to current game number
+                            Event = ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value + Convert.ToInt64(playerList[i].Substring(0, 1)),
+                            ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1
+                        };
+                        ctx.GameBets.Add(bet);
+                    }
+                }
+                ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value += 3;
+                ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value += 1;
+                ctx.SaveChanges();
+                return bet.Id;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

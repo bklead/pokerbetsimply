@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using OnBarcode.Barcode;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Text;
@@ -51,7 +50,7 @@ namespace PokerBet.Controllers
                 };
             }
 
-            var Model = new CheckModel()
+            var model = new CheckModel()
             {
                 ContractNumber = "978" + firstBet.ContractNumber,
                 CurrentDate = DateTime.Now,
@@ -61,7 +60,7 @@ namespace PokerBet.Controllers
             };
 
 
-            return View(Model);
+            return View(model);
         }
 
         public ActionResult Barcode(string code)

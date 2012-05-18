@@ -102,5 +102,22 @@ namespace PokerBet.Controllers
             return rids;
         }
 
+        public int Create(string playerList, string oddList, string sum)
+        {
+            string[] odds = oddList.TrimEnd(',').Split(',');
+            string[] players = playerList.TrimEnd(',').Split(',');
+
+            int? id = Unit.PokerBetSrvc.CreateStake(players, odds, sum);
+
+            if (id != null)
+            {
+               //return RedirectToAction("Index", "Check", new { id= id.Value });
+               // return Redirect("/Check/Index/" + id.Value.ToString());
+               return id.Value;
+            }
+
+            return -1;
+        }
+
     }
 }
