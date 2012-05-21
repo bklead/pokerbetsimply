@@ -134,7 +134,7 @@ var
 var 
 	chipClasses = new Array("chipBlue", "chipBlack", "chipYellow", "chipRed");
 function getStakes() {
-    $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 10000,
+    $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 30000,
         success: function (data) {
             try {
                 var json = eval('(' + data + ')');
@@ -142,18 +142,20 @@ function getStakes() {
                     var currentPlayer = $(obj).attr('player');
                     var chipMarked = 0;
                     for (var player in json) {
-                        if (player == currentPlayer) {
-                            $(obj).show();
-                            $(obj).html(json[player]);
-                            chipMarked = 1;
-                            var classified = 0;
-                            for (var i = 0; i < chipClasses.length; i++) {
-                                if ($(obj).hasClass(chipClasses[i])) {
-                                    classified = 1;
+                        if (json[player] != 0) {
+                            if (player == currentPlayer) {
+                                $(obj).show();
+                                $(obj).html(json[player]);
+                                chipMarked = 1;
+                                var classified = 0;
+                                for (var i = 0; i < chipClasses.length; i++) {
+                                    if ($(obj).hasClass(chipClasses[i])) {
+                                        classified = 1;
+                                    }
                                 }
-                            }
-                            if (classified == 0) {
-                                $(obj).addClass(chipClasses[Math.round(Math.random() * chipClasses.length)]);
+                                if (classified == 0) {
+                                    $(obj).addClass(chipClasses[Math.round(Math.random() * chipClasses.length)]);
+                                }
                             }
                         }
                     }
@@ -625,7 +627,8 @@ $(function () {
                             currentRIDS = json;
                             drawShoppingCart();
                             if (data != -1) {
-                                window.open("/Check/Index/" + data.toString(),'_blank');
+                                window.open("/Check/Index/" + data.toString(), '_blank');
+                                unwaitBox();
                             }
                         }
                     });

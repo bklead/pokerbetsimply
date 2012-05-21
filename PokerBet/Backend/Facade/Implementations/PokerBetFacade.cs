@@ -190,6 +190,26 @@ namespace Backend.Facade.Implementations
             }
         }
 
+        public double GetPlayerCoefficient(short playerNumber, short currentState)
+        {
+            int gameId;
+            short gameNumber = Convert.ToInt16(playerNumber.ToString().Substring(0, 1));
+            switch (gameNumber)
+            {
+                case 1: gameId = ctx.GameStates.FirstOrDefault().Table4PlayerId; break;
+                case 2: gameId = ctx.GameStates.FirstOrDefault().Table6PlayerId; break;
+                default: gameId = ctx.GameStates.FirstOrDefault().Table8PlayerId; break;
+            }
+
+            string coeffs;
+            switch (currentState)
+            {
+                case 0: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep1; break;
+                case 1: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep2; break;
+                default: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep3; break;
+            }
+            return Convert.ToDouble(coeffs.Split(',')[Convert.ToInt16(playerNumber.ToString().Substring(1, 1))]);
+        }
 
         public GameBet[] GetGameBet(int id)
         {
@@ -219,6 +239,22 @@ namespace Backend.Facade.Implementations
                             ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1
                         };
                         ctx.GameBets.Add(bet);
+
+                        var numberOfPlayers = GetNumberOfPlayers(Convert.ToInt16(playerList[i].Substring(0, 1)));
+                        var riverFinder = ctx.RiverFinder.SingleOrDefault(p => p.NumberOfPlayers == numberOfPlayers);
+                        var prize = (Convert.ToInt32(sum)/oddList.Length)*Convert.ToDouble(oddList[i]);
+
+                        switch (Convert.ToInt32(playerList[i].Substring(1, 1))+1)
+                        {
+                            case 1: riverFinder.Prize1 += prize; break;
+                            case 2: riverFinder.Prize2 += prize; break;
+                            case 3: riverFinder.Prize3 += prize; break;
+                            case 4: riverFinder.Prize4 += prize; break;
+                            case 5: riverFinder.Prize5 += prize; break;
+                            case 6: riverFinder.Prize6 += prize; break;
+                            case 7: riverFinder.Prize7 += prize; break;
+                            case 8: riverFinder.Prize8 += prize; break;
+                        }
                     }
                 }
                 ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value += 3;
@@ -229,6 +265,84 @@ namespace Backend.Facade.Implementations
             catch
             {
                 return null;
+            }
+        }
+
+        public void ClearRiverFinder()
+        {
+            ctx.RiverFinder.ForEach(p => p.Prize1 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize2 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize3 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize4 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize5 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize6 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize7 = 0);
+            ctx.RiverFinder.ForEach(p => p.Prize8 = 0);
+            ctx.SaveChanges();
+        }
+
+        private void SetPossiblePrizesList(int i,string[] winners,ref double[] prizes)
+        {
+            foreach (string winner in winners)
+            {
+                short numberOfPlayers = GetNumberOfPlayers(Convert.ToInt16(i + 1));
+                switch (winner)
+                {
+                    case "1": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize1; break;
+                    case "2": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize2; break;
+                    case "3": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize3; break;
+                    case "4": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize4; break;
+                    case "5": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize5; break;
+                    case "6": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize6; break;
+                    case "7": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize7; break;
+                    case "8": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize8; break;
+                }
+            }
+        }
+
+        public int[] GetBestPrizeNumber(Game[] games)
+        {
+            int[] result = {1,1,1};
+
+            for(int i=0;i<3;i++)
+            {
+                double[] prizes = { 0, 0, 0 };
+                string[] winners = games[i].Winner1.Split(',');
+                SetPossiblePrizesList(i,winners, ref prizes);
+
+                for (int j = 2; j <= 4; j++)
+                {
+                    double[] testPrizes = { 0, 0, 0 };
+                    switch (j)
+                    {
+                        case 2: winners = games[i].Winner2 != null ? games[i].Winner2.Split(',') : null; break;
+                        case 3: winners = games[i].Winner3 != null ? games[i].Winner3.Split(',') : null; break;
+                        case 4: winners = games[i].Winner4 != null ? games[i].Winner4.Split(',') : null; break;
+                    }
+                    if (winners != null)
+                    {
+                        SetPossiblePrizesList(i, winners, ref testPrizes);
+                        if (testPrizes[i] < prizes[i])
+                        {
+                            prizes[i]=testPrizes[i];
+                            result[i] = j;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+
+        private short GetNumberOfPlayers(short tableNumber)
+        {
+            switch (tableNumber)
+            {
+                case 1: return 4;
+                case 2: return 6;
+                default: return 8;
             }
         }
     }

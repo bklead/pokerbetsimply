@@ -6,12 +6,19 @@ using System.Web.Mvc;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Domain;
+using PokerBet.Helpers;
 
 namespace PokerBet.Controllers
 {
     public class HomeController : BaseController
     {
         private Dictionary<short, string> TableNumber;
+        private static bool hasRiverFinderStarted = false;
+        private static int[] riverNumber = {1,1,1};
+        private static short currentState;
+        private static Stakes stakes = new Stakes();
+        private static Random random = new Random();
+
         public HomeController()
         {
             TableNumber = new Dictionary<short, string>()
@@ -29,7 +36,8 @@ namespace PokerBet.Controllers
 
         public ActionResult Stakes()
         {
-            return Json("{ '35': 850, '25': 20, '32': 1500, '11': 1672, '21': 900, '36': 100, '12': 300, '34': 110, '37': 100, '30': 1840, '24': 1060, '13': 2466, '10': 942, '23': 190, '31': 350 }", JsonRequestBehavior.AllowGet);
+            InitializeStakes();
+            return Json("{ '35': " + stakes.Stake35 + ", '33': " + stakes.Stake33 + ", '25': " + stakes.Stake25 + ", '20': " + stakes.Stake20 + ", '22': " + stakes.Stake22 + ", '32': " + stakes.Stake32 + ", '11': " + stakes.Stake11 + ", '21': " + stakes.Stake21 + ", '36': " + stakes.Stake36 + ", '12': " + stakes.Stake12 + ", '34': " + stakes.Stake34 + ", '37': " + stakes.Stake37 + ", '30': " + stakes.Stake30 + ", '24': " + stakes.Stake24 + ", '13': " + stakes.Stake13 + ", '10': " + stakes.Stake10 + ", '23': " + stakes.Stake23 + ", '31': " + stakes.Stake31 + " }", JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Phistory()
@@ -56,23 +64,77 @@ namespace PokerBet.Controllers
             else
             {
                 table = Unit.PokerBetSrvc.GetTable(out state);
+                currentState = state;
+                if (state == 0 && !hasRiverFinderStarted)
+                {
+                    Unit.PokerBetSrvc.ClearRiverFinder();
+                    stakes = new Stakes();
+                    hasRiverFinderStarted = true;
+
+                }
+                if (state == 3 && hasRiverFinderStarted)
+                {
+                    hasRiverFinderStarted = false;
+                    riverNumber = Unit.PokerBetSrvc.GetBestPrizeNumber(table);
+                }
                 currentGameState = Unit.PokerBetSrvc.GetCurrentState();
             }
 
 
             JObject mainJson = 
             new JObject(
-                CreateGameJSON(table[2], state),
+                CreateGameJSON(table[2], state,2,isStatic),
                 new JProperty("timestamp", currentGameState==null ? 0 : currentGameState.StartTime.Second),
-                CreateGameJSON(table[0], state),
-                CreateGameJSON(table[1], state),
+                CreateGameJSON(table[0], state, 0, isStatic),
+                CreateGameJSON(table[1], state, 1, isStatic),
                 new JProperty("ts", (DateTime.Now - currentGameState.StartTime).TotalSeconds)
             );
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));
         }
 
-        private JProperty CreateGameJSON(Game game, int state)
+        private string GetFinalInfo(int gameNumber, string info,Game game,int[] riverNumber)
+        {
+            switch (info)
+            {
+                case "winner":
+                    {
+                        switch (riverNumber[gameNumber])
+                        {
+                            case 1: return game.Winner1; 
+                            case 2: return game.Winner2;
+                            case 3: return game.Winner3;
+                            case 4: return game.Winner4; 
+                        }
+                        break;
+                    }
+                case "winning":
+                    {
+                        switch (riverNumber[gameNumber])
+                        {
+                            case 1: return game.Winning1_base.Name;
+                            case 2: return game.Winning2_base.Name;
+                            case 3: return game.Winning3_base.Name;
+                            case 4: return game.Winning4_base.Name;
+                        }
+                        break;
+                    }
+                case "river":
+                    {
+                        switch (riverNumber[gameNumber])
+                        {
+                            case 1: return game.River1.ToString();
+                            case 2: return game.River2.ToString();
+                            case 3: return game.River3.ToString();
+                            case 4: return game.River4.ToString();
+                        }
+                        break;
+                    }
+            }
+            return "";
+        }
+
+        private JProperty CreateGameJSON(Game game, int state,int gameNumber,bool isStatic)
         {
             string[] coefficients = new string[game.NumberOfPlayers];
             switch (state)
@@ -91,7 +153,7 @@ namespace PokerBet.Controllers
                     }
                 case 3:
                     {
-                        var winners = game.Winner1.Split(',');
+                        var winners = GetFinalInfo(gameNumber,"winner",game,isStatic ? new int[] {1,1,1} : riverNumber).Split(',');
                         for (int i = 0; i < game.NumberOfPlayers; i++)
                         {
                             coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
@@ -114,7 +176,7 @@ namespace PokerBet.Controllers
             }
             else
             {
-                var winners = game.Winner1.Split(',');
+                var winners = GetFinalInfo(gameNumber, "winner", game, isStatic ? new int[] { 1, 1, 1 } : riverNumber).Split(',');
                 for (int i = 0; i < game.NumberOfPlayers; i++)
                 {
                     players.Add(CreatePlayerJSON(table, i, (winners.Contains((i + 1).ToString())) ? "0.97" : "0", (short)game.GetType().GetProperty("Player" + (i + 1).ToString() + "Card1").GetValue(game, null),
@@ -124,12 +186,12 @@ namespace PokerBet.Controllers
 
             var gameJobject = new JObject(
                 new JProperty("playersNo", game.NumberOfPlayers.ToString()),
-                new JProperty("deskCards", GetDesk(game, state)),                
+                new JProperty("deskCards", GetDesk(game, state,gameNumber,isStatic)),                
                 new JProperty("players", players)
             );
 
             if (state == 3)
-            gameJobject.Add(new JProperty("BH", game.Winning1_base.Name));
+                gameJobject.Add(new JProperty("BH", GetFinalInfo(gameNumber, "winning", game, isStatic ? new int[] { 1, 1, 1 } : riverNumber)));
 
             var gamejson =
             new JProperty(table, gameJobject);
@@ -151,7 +213,7 @@ namespace PokerBet.Controllers
             return playerJson;
         }
 
-        private string GetDesk(Game game, int state)
+        private string GetDesk(Game game, int state,int gameNumber,bool isStatic)
         {
             var desk = String.Empty;
 
@@ -159,7 +221,7 @@ namespace PokerBet.Controllers
             {
                 case 3:
                     {
-                        desk = " " + GetCardById(game.River1);
+                        desk = " " + GetCardById(Convert.ToInt16(GetFinalInfo(gameNumber, "river", game, isStatic ? new int[] { 1, 1, 1 } : riverNumber)));
                         goto case 2;
                     }
                 case 2:
@@ -182,6 +244,44 @@ namespace PokerBet.Controllers
         private string GetCardById(short id)
         {
             return Unit.PokerBetSrvc.GetCardNameByID(id);
+        }
+
+        private void InitializeStakes()
+        {
+            if (GetPlayerCoefficient(10) > 1) stakes.Stake10 += GetRandomNumber();
+            if (GetPlayerCoefficient(11) > 1) stakes.Stake11 += GetRandomNumber();
+            if (GetPlayerCoefficient(12) > 1) stakes.Stake12 += GetRandomNumber();
+            if (GetPlayerCoefficient(13) > 1) stakes.Stake13 += GetRandomNumber();
+            if (GetPlayerCoefficient(20) > 1) stakes.Stake20 += GetRandomNumber();
+            if (GetPlayerCoefficient(21) > 1) stakes.Stake21 += GetRandomNumber();
+            if (GetPlayerCoefficient(22) > 1) stakes.Stake22 += GetRandomNumber();
+            if (GetPlayerCoefficient(23) > 1) stakes.Stake23 += GetRandomNumber();
+            if (GetPlayerCoefficient(24) > 1) stakes.Stake24 += GetRandomNumber();
+            if (GetPlayerCoefficient(25) > 1) stakes.Stake25 += GetRandomNumber();
+            if (GetPlayerCoefficient(30) > 1) stakes.Stake30 += GetRandomNumber();
+            if (GetPlayerCoefficient(31) > 1) stakes.Stake31 += GetRandomNumber();
+            if (GetPlayerCoefficient(32) > 1) stakes.Stake32 += GetRandomNumber();
+            if (GetPlayerCoefficient(33) > 1) stakes.Stake33 += GetRandomNumber();
+            if (GetPlayerCoefficient(34) > 1) stakes.Stake34 += GetRandomNumber();
+            if (GetPlayerCoefficient(35) > 1) stakes.Stake35 += GetRandomNumber();
+            if (GetPlayerCoefficient(36) > 1) stakes.Stake36 += GetRandomNumber();
+            if (GetPlayerCoefficient(37) > 1) stakes.Stake37 += GetRandomNumber();
+        }
+
+        private double GetPlayerCoefficient(short playerNumber)
+        {
+            return Unit.PokerBetSrvc.GetPlayerCoefficient(playerNumber,currentState);
+        }
+
+        private int GetRandomNumber()
+        {
+            var x = random.Next(0, 20);
+            if (x <= 15)
+                return 0;
+            else if (x <= 18)
+                return random.Next(0, 200);
+            else
+                return random.Next(0, 500);
         }
 
         public ActionResult Round()
