@@ -18,5 +18,8 @@ namespace Backend.Facade.Interfaces
         GameState GetCurrentState();
         GameBet[] GetGameBet(int id);
         int? CreateStake(string[] playerList, string[] oddList, string sum);
+        void ClearRiverFinder();
+        int[] GetBestPrizeNumber(Game[] games);
+        double GetPlayerCoefficient(short playerNumber,short currentState);
     }
 }
