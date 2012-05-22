@@ -236,7 +236,8 @@ namespace Backend.Facade.Implementations
                             TableNumber = Convert.ToInt32(playerList[i].Substring(0, 1)),
                             TableCode = 171588, //need to set to current game number
                             Event = ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value + Convert.ToInt64(playerList[i].Substring(0, 1)),
-                            ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1
+                            ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1,
+                            GameUniqueNumber = ctx.Constants.FirstOrDefault(p=>p.Name == "GameUniqueNumber").Value
                         };
                         ctx.GameBets.Add(bet);
 
@@ -298,6 +299,20 @@ namespace Backend.Facade.Implementations
                     case "8": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize8; break;
                 }
             }
+        }
+
+        public void GenerateWinTickets(int winnerNumber, int gameNumber)
+        {
+            int winnerFullNumber = Convert.ToInt32((gameNumber+1).ToString() + winnerNumber.ToString());
+            ctx.GameBets.Where(p => p.GameUniqueNumber == ctx.Constants.FirstOrDefault(m => m.Name == "GameUniqueNumber").Value && p.Winner == winnerFullNumber).ForEach(p => p.IsWinningTicket = true);
+            ctx.SaveChanges();
+        }
+
+
+        public void AddGameUniqueNumber()
+        {
+            ctx.Constants.FirstOrDefault(m => m.Name == "GameUniqueNumber").Value++;
+            ctx.SaveChanges();
         }
 
         public int[] GetBestPrizeNumber(Game[] games)

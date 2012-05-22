@@ -21,5 +21,7 @@ namespace Backend.Facade.Interfaces
         void ClearRiverFinder();
         int[] GetBestPrizeNumber(Game[] games);
         double GetPlayerCoefficient(short playerNumber,short currentState);
+        void GenerateWinTickets(int winnerNumber,int gameNumber);
+        void AddGameUniqueNumber();
     }
 }
