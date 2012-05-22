@@ -16,7 +16,7 @@ namespace PokerBet.Controllers
         private static bool hasRiverFinderStarted = false;
         private static int[] riverNumber = {1,1,1};
         private static short currentState;
-        private static Stakes stakes = new Stakes();
+        public static Stakes stakes = new Stakes();
         private static Random random = new Random();
 
         public HomeController()
@@ -68,6 +68,7 @@ namespace PokerBet.Controllers
                 if (state == 0 && !hasRiverFinderStarted)
                 {
                     Unit.PokerBetSrvc.ClearRiverFinder();
+                    Unit.PokerBetSrvc.AddGameUniqueNumber();
                     stakes = new Stakes();
                     hasRiverFinderStarted = true;
 
@@ -157,6 +158,10 @@ namespace PokerBet.Controllers
                         for (int i = 0; i < game.NumberOfPlayers; i++)
                         {
                             coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
+                            if (winners.Contains((i + 1).ToString()))
+                            {
+                                Unit.PokerBetSrvc.GenerateWinTickets(i,gameNumber);
+                            }
                         }
                         break;
                     }
@@ -275,13 +280,13 @@ namespace PokerBet.Controllers
 
         private int GetRandomNumber()
         {
-            var x = random.Next(0, 20);
-            if (x <= 15)
+            var x = random.Next(0, 30);
+            if (x <= 25)
                 return 0;
-            else if (x <= 18)
-                return random.Next(0, 200);
+            else if (x <= 28)
+                return random.Next(0, 50);
             else
-                return random.Next(0, 500);
+                return random.Next(0, 100);
         }
 
         public ActionResult Round()

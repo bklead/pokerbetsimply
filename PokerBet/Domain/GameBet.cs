@@ -19,5 +19,8 @@ namespace Domain
         public int Winner { get; set; }
         public double Index { get; set; }
         public int Sum { get; set; }
+        public long GameUniqueNumber { get; set; }
+        public bool IsWinningTicket { get; set; }
+        public bool IsPayed { get; set; }
     }
 }
