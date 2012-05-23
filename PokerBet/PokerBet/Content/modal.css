@@ -1,0 +1,9 @@
+﻿.span-text
+{
+    font-size:0.7em;
+}
+
+#history-date-from,#history-date-to
+{
+    width:140px;
+}
