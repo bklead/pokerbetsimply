@@ -15,6 +15,7 @@ namespace Domain
         public int Table6PlayerId { get; set; }
         public int Table8PlayerId { get; set; }
         public short State { get; set; }
+        public int Round { get; set; }
         public DateTime StartTime { get; set; }
 
         [ForeignKey("Table4PlayerId")]

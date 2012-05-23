@@ -131,34 +131,34 @@ namespace Backend.Facade.Implementations
             var name = card[1].First() + card[0].First().ToString().ToLower();
             return name;
         }
-
+        
 
         public GameState GetCurrentState()
         {
             return ctx.GameStates.First();
         }
 
-
-        public bool ChangeGameState()
+        public bool ChangeGameState(int? round)
         {
             var current = ctx.GameStates.FirstOrDefault();
             Game[] games = null;
 
             if (current == null)
             {
-                games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                games = GetNextGames();//ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
                 SetState(new GameState()
                 {
                     Table4PlayerId = games[0].Id,
                     Table6PlayerId = games[1].Id,
                     Table8PlayerId = games[2].Id,
                     State = 0,
-                    StartTime = DateTime.Now
+                    StartTime = DateTime.Now,
+                    Round = round.Value
                 });
             }
             else
-            {
-                if (current.State != 3)
+            {          
+                if (current.State != 3 && !round.HasValue)
                 {
                     current.StartTime = DateTime.Now;
                     current.State++;
@@ -166,14 +166,16 @@ namespace Backend.Facade.Implementations
                 }
                 else
                 {
-                    games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                    //games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                    games = GetNextGames();
                     SetState(new GameState()
                     {
                         Table4PlayerId = games[0].Id,
                         Table6PlayerId = games[1].Id,
                         Table8PlayerId = games[2].Id,
                         State = 0,
-                        StartTime = DateTime.Now
+                        StartTime = DateTime.Now,
+                        Round = round ?? current.Round+1
                     });
                     ctx.Entry(current).State = EntityState.Deleted;
                 }
@@ -189,6 +191,25 @@ namespace Backend.Facade.Implementations
                 return false;
             }
         }
+
+        private Game[] GetNextGames()
+        {
+            var minPlayCount = ctx.Games.Min(p => p.PlayedCount);
+            var skip = new Random().Next(ctx.Games.Count(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount));
+
+            var randomGame = ctx.Games.Where(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount).OrderBy(m => m.Id).Skip(skip).Take(1).First();
+            var games = ctx.Games.Where(m => m.Id >= randomGame.Id).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+
+            foreach (var game in games)
+            {
+                ++game.PlayedCount;
+            }
+
+            ctx.SaveChanges();
+
+            return games;
+        }
+
 
         public double GetPlayerCoefficient(short playerNumber, short currentState)
         {
@@ -267,6 +288,11 @@ namespace Backend.Facade.Implementations
             {
                 return null;
             }
+        }
+        
+        public List<History> GetHistory()
+        {
+            return ctx.History.ToList().OrderByDescending(m => m.Id).ToArray().Take(8).ToList();
         }
 
         public void ClearRiverFinder()

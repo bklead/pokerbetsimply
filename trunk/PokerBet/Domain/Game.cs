@@ -12,6 +12,7 @@ namespace Domain
         [Key]
         public int Id { get; set; }
         public short NumberOfPlayers { get; set; }
+        public int PlayedCount { get; set; }
 
         public short Player1Card1 { get; set; }
         public short Player1Card2 { get; set; }

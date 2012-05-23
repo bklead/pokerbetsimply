@@ -6,17 +6,21 @@ using System.Web.Mvc;
 using Backend;
 using Domain;
 using PokerBet.Areas.AdminPanel.Models;
+using PokerBet.Controllers;
+using System.Web.Security;
 
 namespace PokerBet.Areas.AdminPanel.Controllers
 {
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
-        protected UnitOfWork Unit { get; private set; }
-
+        MembershipProvider provider;
         public DashboardController()
         {
+            provider = Membership.Provider;
             Unit = new UnitOfWork();
         }
+
+        protected UnitOfWork Unit { get; private set; }
 
         public ActionResult Index(int? id)
         {
@@ -98,8 +102,115 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return RedirectToAction("Index", new { id=model.CurrentGame });
         }
 
+        
 
+        [HttpPost]
+        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                if (provider.ValidateUser(model.UserName, model.Password))
+                {
+                    FormsAuthentication.SetAuthCookie(model.UserName, true);
 
+                    if (!String.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Start");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        public ActionResult LogOff()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return RedirectToAction("LogOn");
+        }
+
+        [HttpGet]
+        public ActionResult LogOn()
+        {
+            return View();
+        }
+
+        public ActionResult CreateUsers()
+        {
+            MembershipCreateStatus status;
+
+            if (Membership.Provider.GetUser("Cashier", false) == null)
+            {
+                provider.CreateUser("Cashier", "123456", "artur.keyan@gmail.com", null, null, true, null, out status);
+                provider.CreateUser("Admin", "123456", "artur.keyan@gmail.com", null, null, true, null, out status);
+            }
+
+            if (!Roles.RoleExists("Cashier"))
+            {
+                Roles.CreateRole("Cashier");
+            }
+
+            if (!Roles.RoleExists("Admin"))
+            {
+                Roles.CreateRole("Admin");
+            }
+
+            if (!Roles.IsUserInRole("Cashier", "Cashier"))
+            {
+                Roles.AddUserToRole("Cashier", "Cashier");
+            }
+
+            if (!Roles.IsUserInRole("Admin", "Admin"))
+            {
+                Roles.AddUserToRole("Admin", "Admin");
+            }
+
+            return RedirectToAction("Start");
+        }
+
+        [HttpGet]
+        [Authorize(Roles="Admin")]
+        public ActionResult Start()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Start(List<RoundAndWinner> model)
+        {
+            if (ModelState.IsValid)
+            {
+                var history = new List<History>(model.Count);
+                foreach (var item in model)
+                {
+                    history.Add(new History()
+                    {
+                        Round = item.Round,
+                        Winners = item.Winners
+                    });
+                }
+
+                var result = Unit.AdminSrvc.InitGameHistory(history);
+                if (result != -1)
+                {
+                    Unit.PokerBetSrvc.ChangeGameState(result);
+                    MvcApplication.timer.Start();
+                    return Redirect("/");
+                }
+            }
+            return View(model);
+        }
 
         List<string> GetAllPossibleCombinations(short x)
         {
@@ -119,6 +230,5 @@ namespace PokerBet.Areas.AdminPanel.Controllers
 
             return result.OrderBy(p=>p.Length).ToList();
         }
-
     }
 }

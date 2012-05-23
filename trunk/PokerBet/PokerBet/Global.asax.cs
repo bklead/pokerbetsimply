@@ -14,6 +14,8 @@ namespace PokerBet
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static Timer timer;
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -37,13 +39,10 @@ namespace PokerBet
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-
-            timer_Elapsed(null, null);
-
-            Timer timer = new Timer(60000);
+            
+            timer = new Timer(60000);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Enabled = true;
-            timer.Start();
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)

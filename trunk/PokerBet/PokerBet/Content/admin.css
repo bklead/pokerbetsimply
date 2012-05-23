@@ -1,0 +1,55 @@
+﻿td.tdRound input
+{
+    margin: 0 30px 0 15px;      
+}
+
+td.tdWinner input
+{
+    width: 210px;
+}
+
+td input
+{
+    border: 2px solid #ccc;   
+}
+
+#historyTable tr:nth-child(even) input 
+{
+    background: #C9DECB
+}
+
+#historyTable tr:nth-child(odd) input
+{
+    background: #B6DEB6
+}
+
+#start
+{
+    float: right;
+    height: 30px;
+    margin-top: 16px;
+    width: 100px;    
+}
+
+.input-validation-error
+{
+    border-color: Red;    
+}
+
+form div
+{
+    overflow: auto;
+    margin-bottom: 10px;   
+    width 
+}
+
+form div Label
+{
+    float: left; 
+    color: #fff;   
+}
+
+form div input
+{
+    float: right;    
+}

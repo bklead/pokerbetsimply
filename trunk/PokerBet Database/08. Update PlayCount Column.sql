@@ -1,0 +1,3 @@
+ALTER TABLE Games 
+ADD PlayedCount INT NOT NULL 
+DEFAULT (0)

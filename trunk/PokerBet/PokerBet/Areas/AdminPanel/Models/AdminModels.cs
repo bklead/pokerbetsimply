@@ -35,4 +35,29 @@ namespace PokerBet.Areas.AdminPanel.Models
         public int CurrentGame { get; set; }
     }
 
+    public class RoundAndWinner
+    {
+        [Required]
+        public int Round { get; set; }
+
+        [Required]
+        [RegularExpression(@"(\d{2})$|(\d{2},)+(\d{2})$")]
+        public string Winners { get; set; }
+
+        public static explicit operator History(RoundAndWinner round)
+        {
+            return null;
+        }
+    }
+
+    public class LogOnModel
+    {
+        [Display(Name="Role")]
+        public string UserName { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name="Password")]
+        public string Password { get; set; }    
+    }
+
 }
