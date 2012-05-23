@@ -9,7 +9,43 @@
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-ui-1.8.11.js"></script>
+<link href="/Content/modal.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/Scripts/bmpoker.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#history-modal').dialog({
+            modal: true,
+            autoOpen: false,
+            width: 800,
+            height: 600,
+            open: function (event, ui) {
+                $('#history-date-from').datepicker().click(function () {
+                    $(this).datepicker('show');
+                });
+                $('#history-date-to').datepicker().click(function () {
+                    $(this).datepicker('show');
+                });
+            },
+            close: function (event, ui) {
+                $('#history-date-from').datepicker('destroy');
+                $('#history-date-to').datepicker('destroy');
+            }
+        });
+
+        $("#stake-history").load("/Stake/GetHistory");
+
+        $("#history-get").click(function () {
+
+        });
+
+        $('#history-div').click(function () {
+            $('#history-modal').dialog('open');
+        });
+    });
+
+</script>
 <title>Poker Cashier GUI</title>
 <link rel="stylesheet" href="/Content/css.css" type="text/css" />
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css" />
@@ -31,8 +67,10 @@
 	<td class="turn cardPlace" align="center"><b class="opac">Turn</b></td>
 	<td class="river cardPlace" align="center"><b class="opac">River</b></td>
 	</tr>
-	</table>	
-	
+	</table>
+    
+    <div id="check-div" class="shadowDraw" style="position:absolute; top: 5px ; left:750px; cursor:pointer;">Проверка</div>
+    <div id="history-div" class="shadowDraw" style="position:absolute; top: 5px ; left:850px; cursor:pointer;">Отчет</div>
 	
 	<table width=78% cellpadding=5 style="border: solid 0px; position:absolute; top: 100px; left: 10px;" >
 		<tr>
@@ -199,6 +237,15 @@
 	</table>
 	
 	<div id="log"></div>
+
+    <div id="history-modal" style="display:none">
+    <span class="span-text">Дата начала отчета:</span>
+    <input type="text" id="history-date-from" value="@ViewBag.CurrentDate"/>
+    <span class="span-text">Дата окончания отчета:</span>
+    <input type="text" id="history-date-to" value="@ViewBag.CurrentDate"/>
+    <input type="button" value="Показать" id="history-get"/>
+    <div id="stake-history"></div>
+    </div>
 </body>
 </html>
 

@@ -22,5 +22,6 @@ namespace Domain
         public long GameUniqueNumber { get; set; }
         public bool IsWinningTicket { get; set; }
         public bool IsPayed { get; set; }
+        public DateTime PaymentDate { get; set; }
     }
 }

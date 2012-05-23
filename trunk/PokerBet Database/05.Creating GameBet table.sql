@@ -9,5 +9,9 @@ CREATE TABLE GameBet
 	Winner int NOT NULL,
 	[Index] float NOT NULL,
 	[Sum] int NOT NULL,	
+	GameUniqueNumber bigint NOT NULL,
+	IsWinningTicket bit NOT NULL default(0),
+	IsPayed bit NOT NULL default(0),
+	PaymentDate datetime
 );
 Go
