@@ -42,13 +42,17 @@ namespace PokerBet.Controllers
 
         public ActionResult Phistory()
         {
-            return Json("[['168371','&nbsp;11,22,34,36'],['168372','&nbsp;13,23,34'],['168373','&nbsp;13,22,25,36'],['168374','&nbsp;10,22,37'],['168375','&nbsp;12,21,22,34'],['168376','&nbsp;11,12,24,33'],['168377','&nbsp;10,21,34'],['168378','&nbsp;12,22,31']]", JsonRequestBehavior.AllowGet);
+            var history = Unit.PokerBetSrvc.GetHistory();
+            JArray arrayJson = new JArray();
+            foreach (var item in history)
+            {
+                arrayJson.Add(new JArray(item.Round.ToString(), "&nbsp;"+item.Winners));
+            }
+
+            return Content(arrayJson.ToString(Newtonsoft.Json.Formatting.None));
         }
 
-        
- 
-
-
+      
         public ActionResult Main(bool isStatic,int? id)
         {
             short state;
@@ -142,15 +146,18 @@ namespace PokerBet.Controllers
             {
                 case 0:
                     {
-                        coefficients = game.CoefficientsStep1.Split(','); break;
+                        coefficients = game.CoefficientsStep1.Split(','); 
+                        break;
                     }
                 case 1:
                     {
-                        coefficients = game.CoefficientsStep2.Split(','); break;
+                        coefficients = game.CoefficientsStep2.Split(','); 
+                        break;
                     }
                 case 2:
                     {
-                        coefficients = game.CoefficientsStep3.Split(','); break;
+                        coefficients = game.CoefficientsStep3.Split(','); 
+                        break;
                     }
                 case 3:
                     {

@@ -26,6 +26,16 @@
 		font-family: verdana;
 		font-size:12px  
 	}
+	
+	@*table tr td
+	{
+	    width: 150px;     
+	}
+	
+	table tr td:first-child
+	{
+	    width: 95px;     
+	}*@
 </style>
 <script type="text/javascript" src="/Scripts/slipprint.js"></script>
 </head>
@@ -42,7 +52,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-<img src="/images/bkleaderlogo.png">
+<img src="/images/bkleaderlogo.png" style="margin-left: 14px;">
 <table>
 		<tr><td>Торговый офис</td><td><b>Leader72_1</b></td></tr>
 		<tr><td>Номер контракта</td><td><b>@Model.ContractNumber</b></td></tr>
@@ -73,7 +83,7 @@
         	
         <tr><td>Возможная маржа</td><td>@Model.Margin</td></tr>        
         <tr><td>Сумма контракта</td><td>@Model.ContractSum</td></tr>
-		<tr><td colspan="2"><img src="@Url.Action("Barcode", new { code = Model.ContractNumber })"></td></tr>
+		<tr><td colspan="2"><img src="@Url.Action("Barcode", new { code = Model.ContractNumber }) style="margin-left: 14px;""></td></tr>
 	</table>
 </body>
 </html>

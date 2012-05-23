@@ -83,6 +83,7 @@
     <Compile Include="Utilits\Barcode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\admin.css" />
     <Content Include="Content\css.css" />
     <Content Include="Content\modal.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -193,6 +194,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stake\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\AdminPanel\Views\Dashboard\Start.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\AdminPanel\Views\Dashboard\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Stake\_History.cshtml" />

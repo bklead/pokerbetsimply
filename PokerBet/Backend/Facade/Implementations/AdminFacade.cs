@@ -51,5 +51,24 @@ namespace Backend.Facade.Implementations
             game.Winning4 = winning4;
             context.SaveChanges();
         }
+
+        public int InitGameHistory(IEnumerable<History> history)
+        {
+            foreach (var item in history)
+            {
+                context.History.Add(item);
+            }
+
+            try
+            {
+                context.SaveChanges();
+            }
+            catch
+            {
+                return -1;
+            }
+
+            return history.Max(m => m.Round)+1;
+        }
     }
 }
