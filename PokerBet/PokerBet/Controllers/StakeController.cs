@@ -53,12 +53,21 @@ namespace PokerBet.Controllers
              return Json(json, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetHistory(DateTime? fromDate, DateTime? toDate)
+        public ActionResult GetHistory(DateTime? fromDate = null, DateTime? toDate = null)
         {
-            if (fromDate == null) fromDate = DateTime.Now;
-            if (toDate == null) toDate = DateTime.Now;
+            if (fromDate == null) fromDate = DateTime.Now.Date;
+            if (toDate == null) toDate = DateTime.Now.Date;
 
-            StakeHistoryModel model = new StakeHistoryModel();
+            toDate = toDate.Value.AddDays(1);
+
+            StakeHistoryModel model = new StakeHistoryModel
+                {
+                    StakeCount = Unit.HistorySrvc.GetStakesCount(fromDate.Value, toDate.Value),
+                    Sum = Unit.HistorySrvc.GetSum(fromDate.Value, toDate.Value),
+                    PaymentSum = Unit.HistorySrvc.GetPaymentSum(fromDate.Value, toDate.Value),
+                    WaitingPaymentSum = Unit.HistorySrvc.GetWaitingPaymentSum(fromDate.Value, toDate.Value),
+                    Stakes = Unit.HistorySrvc.GetStakes(fromDate.Value,toDate.Value)
+                };
 
             return PartialView("_History", model);
         }

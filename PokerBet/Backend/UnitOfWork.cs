@@ -14,6 +14,7 @@ namespace Backend
 
         private IPokerBetFacade pokerFacade;
         private IAdminFacade adminFacade;
+        private IHistoryFacade historyFacade;
 
         public IPokerBetFacade PokerBetSrvc
         {
@@ -38,6 +39,19 @@ namespace Backend
                 return adminFacade;
             }
         }
+
+        public IHistoryFacade HistorySrvc
+        {
+            get
+            {
+                if (historyFacade == null)
+                {
+                    historyFacade = new HistoryFacade(context);
+                }
+                return historyFacade;
+            }
+        }
+
 
         #region Resource removable pattern
         private bool isDisposed = false;
