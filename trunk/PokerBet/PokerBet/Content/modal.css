@@ -1,9 +1,50 @@
-﻿.span-text
+﻿#history-modal span, #history-modal td
 {
     font-size:0.7em;
 }
 
+#history-modal th
+{
+    font-size:0.8em;
+}
+
+#history-modal td
+{
+    text-align:center;
+}
+
+#history-modal td,#history-modal th
+{
+    padding-left:10px;
+}
+
+#stake-history
+{
+    margin-top:20px;
+}
+
+
 #history-date-from,#history-date-to
 {
     width:140px;
+}
+
+.green-stake
+{
+    color:Green;
+}
+
+.blue-stake
+{
+    color:Blue;
+}
+
+.red-stake
+{
+    color:Red;
+}
+
+.ui-dialog-titlebar
+{
+    background:#E47F14 !important;
 }

@@ -1,1 +1,32 @@
-﻿
+﻿@model PokerBet.Models.StakeHistoryModel
+
+<table id="history-master">
+<tr><td>cтавок принято</td><td>@Model.StakeCount</td></tr>
+<tr><td>на общую сумму</td><td>@(Model.Sum)RUR</td></tr>
+<tr><td>сумма совершенных выплат</td><td>@(Model.PaymentSum)RUR</td></tr>
+<tr><td>сумма к выплате</td><td>@(Model.WaitingPaymentSum)RUR</td></tr>
+</table>
+
+<table id="history-details">
+<tr>
+<th>дата</th>
+<th>ставка</th>
+<th>возможный выигрыш</th>
+<th>результат</th>
+<th>дата выплаты</th>
+<th>сумма выплаты</th>
+</tr>
+
+@foreach (var stake in Model.Stakes)
+{
+    <tr class="@(stake.PaymentDate != null ? "green-stake" : (stake.RealWin != 0 ? "red-stake" : "blue-stake"))">
+    <td>@stake.StakeDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+    <td>@(stake.Amount)RUR</td>
+    <td>@(stake.PossibleWin)RUR</td>
+    <td>@(stake.RealWin != 0 ? stake.RealWin.ToString() + "RUR" : "проигрыш")</td>
+    <td>@(stake.PaymentDate!=null ? stake.PaymentDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : null)</td>
+    <td>@(stake.PaymentDate != null ? stake.PaymentAmount.ToString()+"RUR" : "")</td>
+    </tr>
+}
+
+</table>

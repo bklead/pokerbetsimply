@@ -34,13 +34,16 @@
             }
         });
 
-        $("#stake-history").load("/Stake/GetHistory");
-
         $("#history-get").click(function () {
+            var fromDate = $('#history-date-from').val();
+            var toDate = $('#history-date-to').val();
+
+            $("#stake-history").load("/Stake/GetHistory", { fromDate: fromDate, toDate: toDate });
 
         });
 
         $('#history-div').click(function () {
+            $("#stake-history").load("/Stake/GetHistory");
             $('#history-modal').dialog('open');
         });
     });

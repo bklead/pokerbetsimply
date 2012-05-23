@@ -50,6 +50,7 @@
     <Compile Include="GameBet.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Models\SharedModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RiverFinder.cs" />
     <Compile Include="Winning.cs" />
