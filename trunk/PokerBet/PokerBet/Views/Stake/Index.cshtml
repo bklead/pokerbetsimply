@@ -31,6 +31,9 @@
             close: function (event, ui) {
                 $('#history-date-from').datepicker('destroy');
                 $('#history-date-to').datepicker('destroy');
+            },
+            buttons: {
+                "Хорошо": function () { $(this).dialog("close"); }
             }
         });
 
