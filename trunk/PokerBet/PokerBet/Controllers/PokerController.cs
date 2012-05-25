@@ -18,6 +18,7 @@ namespace PokerBet.Controllers
         private static short currentState;
         public static Stakes stakes = new Stakes();
         private static Random random = new Random();
+        private static bool firstTimeHistoryAdd = false;
 
         public HomeController()
         {
@@ -85,7 +86,6 @@ namespace PokerBet.Controllers
                 currentGameState = Unit.PokerBetSrvc.GetCurrentState();
             }
 
-            bool firstTimeHistoryAdd = false;
             string finalWinners="";
 
             JObject mainJson = 
@@ -99,14 +99,15 @@ namespace PokerBet.Controllers
 
             if (state == 0 && firstTimeHistoryAdd == true)
             {
-                finalWinners = "";
+
                 firstTimeHistoryAdd = false;
+                finalWinners = "";
             }
 
             if (state == 3 && firstTimeHistoryAdd==false)
             {
-                Unit.PokerBetSrvc.AddHistory(finalWinners.TrimEnd(','));
                 firstTimeHistoryAdd = true;
+                Unit.PokerBetSrvc.AddHistory(finalWinners.TrimEnd(','));
             }
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));
