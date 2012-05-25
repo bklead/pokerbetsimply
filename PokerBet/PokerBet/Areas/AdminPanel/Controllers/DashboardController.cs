@@ -186,14 +186,12 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles="Admin")]
         public ActionResult Start()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public ActionResult Start(List<RoundAndWinner> model)
         {
             if (ModelState.IsValid)
