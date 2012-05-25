@@ -145,6 +145,13 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return View();
         }
 
+        public ActionResult Stop()
+        {
+            MvcApplication.timer.Stop();
+            Unit.AdminSrvc.Stop();
+            return new EmptyResult();
+        }
+
         public ActionResult CreateUsers()
         {
             MembershipCreateStatus status;

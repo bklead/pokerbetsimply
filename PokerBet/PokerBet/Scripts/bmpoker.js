@@ -550,7 +550,7 @@ $(function () {
         } else {
             var No = ~ ~CurRoundNo;
         }
-        if (deskCards == '0') getHistory();
+        if (deskCards == 0) getHistory();
 
         $('#tmp').html(deskCards + '   ' + (globalData.ts));
         var j = 0;

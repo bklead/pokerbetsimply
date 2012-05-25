@@ -15,5 +15,7 @@ namespace Backend.Facade.Interfaces
         int GetGamesCount();
 
         int InitGameHistory(IEnumerable<History> history);
+
+        void Stop();
     }
 }

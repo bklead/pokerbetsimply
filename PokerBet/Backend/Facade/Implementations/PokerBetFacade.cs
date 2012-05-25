@@ -238,6 +238,16 @@ namespace Backend.Facade.Implementations
             return ctx.GameBets.Where(m => m.ContractNumber == bet.ContractNumber).ToArray();
         }
 
+        public int GetRound()
+        {
+            var state = ctx.GameStates.FirstOrDefault();
+            if (state != null)
+            {
+                return state.Round;
+            }
+            return 0;
+        }
+
         public int? CreateStake(string[] playerList, string[] oddList, string sum)
         {
             try
@@ -255,7 +265,7 @@ namespace Backend.Facade.Implementations
                             Sum = Convert.ToInt32(sum),
                             StartDate = DateTime.Now,
                             TableNumber = Convert.ToInt32(playerList[i].Substring(0, 1)),
-                            TableCode = 171588, //need to set to current game number
+                            TableCode = GetRound(), //need to set to current game number
                             Event = ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value + Convert.ToInt64(playerList[i].Substring(0, 1)),
                             ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1,
                             GameUniqueNumber = ctx.Constants.FirstOrDefault(p=>p.Name == "GameUniqueNumber").Value
@@ -289,6 +299,7 @@ namespace Backend.Facade.Implementations
                 return null;
             }
         }
+
         
         public List<History> GetHistory()
         {
@@ -386,5 +397,56 @@ namespace Backend.Facade.Implementations
                 default: return 8;
             }
         }
+
+
+        public GameBet[] GetCheckByNumber(long number)
+        {
+            return ctx.GameBets.Where(m => m.ContractNumber == number).ToArray();
+        }
+
+        public bool PayCheckByNumber(long numb)
+        {             
+            ctx.GameBets.Where(m => m.ContractNumber == numb).ForEach(m => m.IsPayed = true);
+
+            try
+            {
+                ctx.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public bool AddHistory(string winners)
+        {
+            //if (ctx.History.Count(m => m.Round == GetRound()) != 0) return false;
+            var wins = winners.Split(',').OrderBy(m => m);
+            winners = "";
+            foreach (var item in wins)
+            {
+                winners += item + ",";
+            }
+
+            winners = winners.TrimEnd(',');
+
+            ctx.History.Add(new History() { 
+                Round = GetRound(),
+                Winners = winners
+            });
+
+            try
+            {
+                ctx.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
+

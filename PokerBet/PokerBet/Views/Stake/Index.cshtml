@@ -14,6 +14,54 @@
 <script type="text/javascript">
 
     $(function () {
+        $('#check-modal, #pay-modal').dialog({
+            modal: true,
+            autoOpen: false,
+            width: 300,
+            height: 200,
+            open: function (event, ui) {
+
+            },
+            close: function (event, ui) {
+            }
+        });
+
+        
+        $('#find').click(function () {
+            $.get("@Url.Action("FindCheck", "Stake")", { number: $('#checknumber').val() }, function (data) {
+                if (data.isWinning)
+                {
+                    $('#checknumberhidden').val($('#checknumber').val());
+                    $('#pay').show();
+                } else {
+                    
+                    $('#pay').hide();
+                }
+                $('#paySum').html(data.message);
+
+                $('#check-modal').dialog("close");
+                $('#checknumber').val("");
+                $('#pay-modal').dialog('open');
+            });
+        })
+
+        
+        $('#pay').click(function () {
+            $.get("@Url.Action("PayCheck", "Stake")", { number: $('#checknumberhidden').val() }, function (data) {
+                if (data.status)
+                {
+                    alert("ok");
+                } else 
+                {
+                    alert("error");
+                }
+                $('#pay-modal').dialog('close');
+            });
+        }) 
+
+        $('.cancel').click(function () {
+            $(this).parent().dialog( "close" );
+        })
 
         $('#history-modal').dialog({
             modal: true,
@@ -48,6 +96,10 @@
         $('#history-div').click(function () {
             $("#stake-history").load("/Stake/GetHistory");
             $('#history-modal').dialog('open');
+        });
+
+        $('#check-div').click(function () {
+            $('#check-modal').dialog('open');
         });
     });
 
@@ -243,8 +295,23 @@
 	</table>
 	
 	<div id="log"></div>
+        
+        
+    <input type="hidden" id="checknumberhidden" value="" />
 
-    <div id="history-modal" style="display:none">
+    <div id="check-modal" style="display:none">
+        <input type="text" id="checknumber" value="" />
+        <input type="button" value="Отменить" class="cancel"/>
+        <input type="button" value="Найти" id="find"/>
+    </div>
+
+    <div id="pay-modal" style="display:none">
+        <label id="paySum">1234</label> <br />
+        <input type="button" value="Отменить" class="cancel"/>
+        <input type="button" value="Платить" id="pay"/>
+    </div>
+
+    <div id="history-modal" style="display:none"> 
     <span class="span-text">Дата начала отчета:</span>
     <input type="text" id="history-date-from" value="@ViewBag.CurrentDate"/>
     <span class="span-text">Дата окончания отчета:</span>

@@ -20,7 +20,17 @@
             $('input[name="[0].Round"]').blur(function () {
                 firstRound = this.value;
                 $('input[name*="Round"]').each(function (idx, val) {
-                    $(val).val(++firstRound)
+                    $(val).val(++firstRound);
+                });
+
+                $('input[name*="Winners"]').each(function (idx, val) {
+                    $(val).val("12,24,34");
+                });
+            });
+
+            $('#stop').click(function () {
+                $.get("@Url.Action("Stop", "Dashboard")", function (data) {
+                     
                 });
             });
         });
@@ -43,13 +53,14 @@
                             @Html.EditorFor(m => m[i].Round)
                         </td> 
                         <td class="tdWinner" round=8>
-                            @Html.EditorFor(m => m[i].Winners)
+                            @Html.TextBoxFor(m => m[i].Winners)
                         </td>
 			        </tr>   
                 }			                   			    
 		    </table>  
             
-            <input type="submit" id="start" name="start" value="Start" />          
+            <input type="submit" id="start" name="start" value="Start" />     
+            <input type="Button" name="stop" value="Stop" id="stop" />     
         }
 
 	    </div>
