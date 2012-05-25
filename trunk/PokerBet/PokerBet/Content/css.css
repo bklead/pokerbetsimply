@@ -401,3 +401,20 @@ filter:alpha (opacity=70);
   width: 100px;
   height: 30px;
 }
+
+#check-modal, #pay-modal
+{
+    text-align: center;    
+}
+
+#checknumber, #paySum
+{
+    margin: 20px 0 40px 0;    
+}
+
+#paySum
+{
+    display: inline-block;
+    color: Red;
+    font-size: 16px;    
+}

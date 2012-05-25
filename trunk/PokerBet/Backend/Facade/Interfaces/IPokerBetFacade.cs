@@ -26,5 +26,13 @@ namespace Backend.Facade.Interfaces
         double GetPlayerCoefficient(short playerNumber,short currentState);
         void GenerateWinTickets(int winnerNumber,int gameNumber);
         void AddGameUniqueNumber();
+
+        GameBet[] GetCheckByNumber(long number);
+
+        bool PayCheckByNumber(long numb);
+
+        bool AddHistory(string winners);
+
+        int GetRound();
     }
 }

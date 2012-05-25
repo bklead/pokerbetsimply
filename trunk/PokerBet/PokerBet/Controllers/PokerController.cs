@@ -85,15 +85,29 @@ namespace PokerBet.Controllers
                 currentGameState = Unit.PokerBetSrvc.GetCurrentState();
             }
 
+            bool firstTimeHistoryAdd = false;
+            string finalWinners="";
 
             JObject mainJson = 
             new JObject(
-                CreateGameJSON(table[2], state,2,isStatic),
+                CreateGameJSON(table[2], state,2,isStatic,ref finalWinners),
                 new JProperty("timestamp", currentGameState==null ? 0 : currentGameState.StartTime.Second),
-                CreateGameJSON(table[0], state, 0, isStatic),
-                CreateGameJSON(table[1], state, 1, isStatic),
+                CreateGameJSON(table[0], state, 0, isStatic, ref finalWinners),
+                CreateGameJSON(table[1], state, 1, isStatic,ref finalWinners),
                 new JProperty("ts", (DateTime.Now - currentGameState.StartTime).TotalSeconds)
             );
+
+            if (state == 0 && firstTimeHistoryAdd == true)
+            {
+                finalWinners = "";
+                firstTimeHistoryAdd = false;
+            }
+
+            if (state == 3 && firstTimeHistoryAdd==false)
+            {
+                Unit.PokerBetSrvc.AddHistory(finalWinners.TrimEnd(','));
+                firstTimeHistoryAdd = true;
+            }
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));
         }
@@ -139,7 +153,7 @@ namespace PokerBet.Controllers
             return "";
         }
 
-        private JProperty CreateGameJSON(Game game, int state,int gameNumber,bool isStatic)
+        private JProperty CreateGameJSON(Game game, int state,int gameNumber,bool isStatic,ref string finalWinners)
         {
             string[] coefficients = new string[game.NumberOfPlayers];
             switch (state)
@@ -168,6 +182,8 @@ namespace PokerBet.Controllers
                             if (winners.Contains((i + 1).ToString()))
                             {
                                 Unit.PokerBetSrvc.GenerateWinTickets(i,gameNumber);
+                                finalWinners += (gameNumber + 1).ToString() + i.ToString() + ",";
+
                             }
                         }
                         break;
@@ -298,7 +314,7 @@ namespace PokerBet.Controllers
 
         public ActionResult Round()
         {
-            return Json("168072", JsonRequestBehavior.AllowGet);
+            return Json(Unit.PokerBetSrvc.GetRound().ToString(), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -70,5 +70,21 @@ namespace Backend.Facade.Implementations
 
             return history.Max(m => m.Round)+1;
         }
+
+
+        public void Stop()
+        {
+            foreach (var entity in context.GameStates)
+            {
+                context.Entry(entity).State = System.Data.EntityState.Deleted;
+            }
+
+            foreach (var entity in context.History)
+            {
+                context.Entry(entity).State = System.Data.EntityState.Deleted;
+            }
+
+            context.SaveChanges();
+        }
     }
 }

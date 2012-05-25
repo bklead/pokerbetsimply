@@ -169,5 +169,44 @@ namespace PokerBet.Controllers
             return rids;
         }
 
+        public ActionResult FindCheck(string number)
+        {
+            long numb;
+            if (long.TryParse(number.Substring(3, 9), out numb))
+            {
+                var bets = Unit.PokerBetSrvc.GetCheckByNumber(numb);
+
+                if (bets.Count(m => m.IsPayed) != 0)
+                {
+                    return Json(new { isWinning = false, message = "уже заплачено, նայի չլոխնաս" }, JsonRequestBehavior.AllowGet); 
+                }
+
+                var sum = bets.Where(m => m.IsWinningTicket).Sum(m => m.Sum / bets.Count() * m.Index);
+
+                if (sum == 0)
+                {
+                    return Json(new { isWinning = false, message = "выигрыша нет" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { isWinning = true, message = "чек выиграл <strong>" + sum + "</strong> рублей" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json("error", JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult PayCheck(string number)
+        {
+            long numb;
+            bool status = false;
+            if (long.TryParse(number.Substring(3, 9),out numb))
+            {
+                status = Unit.PokerBetSrvc.PayCheckByNumber(numb);
+            }
+
+            return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
