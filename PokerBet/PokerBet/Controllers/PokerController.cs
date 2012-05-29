@@ -16,7 +16,7 @@ namespace PokerBet.Controllers
         private static bool hasRiverFinderStarted = false;
         private static int[] riverNumber = {1,1,1};
         private static short currentState;
-        public static Stakes stakes = new Stakes();
+        private static Stakes stakes = new Stakes();
         private static Random random = new Random();
         private static bool firstTimeHistoryAdd = false;
 
@@ -304,13 +304,15 @@ namespace PokerBet.Controllers
 
         private int GetRandomNumber()
         {
-            var x = random.Next(0, 30);
-            if (x <= 25)
+            var x = random.Next(0, 31);
+            if (x <= 23)
                 return 0;
-            else if (x <= 28)
+            else if (x <= 26)
                 return random.Next(0, 50);
+            else if (x <= 28)
+                return random.Next(0, 150);
             else
-                return random.Next(0, 100);
+                return random.Next(0, 800);
         }
 
         public ActionResult Round()
