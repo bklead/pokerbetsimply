@@ -79,35 +79,6 @@ namespace PokerBet.Controllers
 
             int? id = Unit.PokerBetSrvc.CreateStake(players, odds, sum);
 
-
-            var smallSum = Convert.ToInt32(sum) / players.Length;
-
-            for (int i = 0; i < players.Length; i++)
-            {
-                var player = Convert.ToInt32(players[i]);
-                switch (player)
-                {
-                    case 10: HomeController.stakes.Stake10 += smallSum; break;
-                    case 11: HomeController.stakes.Stake11 += smallSum; break;
-                    case 12: HomeController.stakes.Stake12 += smallSum; break;
-                    case 13: HomeController.stakes.Stake13 += smallSum; break;
-                    case 20: HomeController.stakes.Stake20 += smallSum; break;
-                    case 21: HomeController.stakes.Stake21 += smallSum; break;
-                    case 22: HomeController.stakes.Stake22 += smallSum; break;
-                    case 23: HomeController.stakes.Stake23 += smallSum; break;
-                    case 24: HomeController.stakes.Stake24 += smallSum; break;
-                    case 25: HomeController.stakes.Stake25 += smallSum; break;
-                    case 30: HomeController.stakes.Stake30 += smallSum; break;
-                    case 31: HomeController.stakes.Stake31 += smallSum; break;
-                    case 32: HomeController.stakes.Stake32 += smallSum; break;
-                    case 33: HomeController.stakes.Stake33 += smallSum; break;
-                    case 34: HomeController.stakes.Stake34 += smallSum; break;
-                    case 35: HomeController.stakes.Stake35 += smallSum; break;
-                    case 36: HomeController.stakes.Stake36 += smallSum; break;
-                    case 37: HomeController.stakes.Stake37 += smallSum; break;
-                }
-            }
-
             if (id != null)
             {
                 //return RedirectToAction("Index", "Check", new { id= id.Value });

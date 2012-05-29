@@ -10,6 +10,8 @@ var
 	deskCards;
 var
 	globalData;
+var  
+    callGetStakes = 0;
 var 
 	currentRIDS;
 var lears = {
@@ -131,46 +133,50 @@ var
 	pgsTable;
 var 
 	winList = new Array();
-var 
+var
 	chipClasses = new Array("chipBlue", "chipBlack", "chipYellow", "chipRed");
+
 function getStakes() {
-    $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 30000,
-        success: function (data) {
-            try {
-                var json = eval('(' + data + ')');
-                $('.chip').each(function (idx, obj) {
-                    var currentPlayer = $(obj).attr('player');
-                    var chipMarked = 0;
-                    for (var player in json) {
-                        if (json[player] != 0) {
-                            if (player == currentPlayer) {
-                                $(obj).show();
-                                $(obj).html(json[player]);
-                                chipMarked = 1;
-                                var classified = 0;
-                                for (var i = 0; i < chipClasses.length; i++) {
-                                    if ($(obj).hasClass(chipClasses[i])) {
-                                        classified = 1;
+    callGetStakes++;
+    if (callGetStakes % 2 == 0) {
+        $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 30000,
+            success: function (data) {
+                try {
+                    var json = eval('(' + data + ')');
+                    $('.chip').each(function (idx, obj) {
+                        var currentPlayer = $(obj).attr('player');
+                        var chipMarked = 0;
+                        for (var player in json) {
+                            if (json[player] != 0) {
+                                if (player == currentPlayer) {
+                                    $(obj).show();
+                                    $(obj).html(json[player]);
+                                    chipMarked = 1;
+                                    var classified = 0;
+                                    for (var i = 0; i < chipClasses.length; i++) {
+                                        if ($(obj).hasClass(chipClasses[i])) {
+                                            classified = 1;
+                                        }
                                     }
-                                }
-                                if (classified == 0) {
-                                    $(obj).addClass(chipClasses[Math.round(Math.random() * chipClasses.length)]);
+                                    if (classified == 0) {
+                                        $(obj).addClass(chipClasses[Math.round(Math.random() * chipClasses.length)]);
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (chipMarked == 0) {
-                        $(obj).hide();
-                        for (var i = 0; i < chipClasses.length; i++) {
-                            $(obj).removeClass(chipClasses[i]);
+                        if (chipMarked == 0) {
+                            $(obj).hide();
+                            for (var i = 0; i < chipClasses.length; i++) {
+                                $(obj).removeClass(chipClasses[i]);
+                            }
                         }
-                    }
-                });
-            } catch (e) {
-                //alert(e);
+                    });
+                } catch (e) {
+                    //alert(e);
+                }
             }
-        }
-    });
+        });
+    }
 }
 function changeMain(data) {
     $('#log').html(data);

@@ -61,8 +61,6 @@
         </td>
         </tr>
         
-        if (i > 0)
-        {
         <tr>
         <td>
         3
@@ -77,10 +75,7 @@
         @Html.DropDownListFor(p => p.GameEditModel[i].Winning3, Model.GameEditModel[i].Winnings.SelectItem(Model.GameEditModel[i].Winning3 == null ? "" : Model.GameEditModel[i].Winning3.ToString()))
         </td>
         </tr>
-        }
         
-        if (i > 1)
-        {
         <tr>
         <td>
         4
@@ -100,7 +95,6 @@
         <td colspan="4">
         <input type="submit" value="Save Games" style="float:right;" /></td>
         </tr>
-        }
         
     }
     </table>
