@@ -23,15 +23,18 @@
                     $(val).val(++firstRound);
                 });
 
-                $('input[name*="Winners"]').each(function (idx, val) {
-                    $(val).val("12,24,34");
-                });
+//                $('input[name*="Winners"]').each(function (idx, val) {
+//                    $(val).val("12,24,34");
+//                });
             });
 
             $('#stop').click(function () {
-                $.get("@Url.Action("Stop", "Dashboard")", function (data) {
+                if (confirm("Stop?"))
+                {
+                    $.get("@Url.Action("Stop", "Dashboard")", function (data) {
                      
-                });
+                    });
+                }
             });
         });
     </script>

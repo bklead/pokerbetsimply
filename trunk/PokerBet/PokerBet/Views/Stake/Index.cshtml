@@ -26,6 +26,13 @@
             }
         });
 
+        $('#check-view-modal').dialog({
+            modal: false,
+            autoOpen: false,
+            width: 350,
+            height: 800,
+        });
+
         
         $('#find').click(function () {
             $.get("@Url.Action("FindCheck", "Stake")", { number: $('#checknumber').val() }, function (data) {
@@ -94,7 +101,16 @@
         });
 
         $('#history-div').click(function () {
-            $("#stake-history").load("/Stake/GetHistory");
+            $("#stake-history").load("/Stake/GetHistory", function () {
+
+                $('.blue-stake').click(function () {
+                    var id = $(this).data('id'); 
+                    $("#check-view-modal").load("/Check/Index/" + id, function() {
+                        $('#check-view-modal').dialog('open');
+                    }); 
+                });
+
+            });
             $('#history-modal').dialog('open');
         });
 
@@ -318,6 +334,10 @@
     <input type="text" id="history-date-to" value="@ViewBag.CurrentDate"/>
     <input type="button" value="Показать" id="history-get"/>
     <div id="stake-history"></div>
+    </div>
+
+    <div id="check-view-modal" style="display:none">
+    
     </div>
 </body>
 </html>

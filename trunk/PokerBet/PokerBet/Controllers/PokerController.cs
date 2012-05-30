@@ -30,6 +30,7 @@ namespace PokerBet.Controllers
             };
         }
 
+        [Authorize(Roles = "Cashier, Admin")]
         public ActionResult Index()
         {
             return View();
@@ -104,7 +105,7 @@ namespace PokerBet.Controllers
                 finalWinners = "";
             }
 
-            if (state == 3 && firstTimeHistoryAdd==false)
+            if (state == 3 && !String.IsNullOrEmpty(finalWinners) && firstTimeHistoryAdd==false)
             {
                 firstTimeHistoryAdd = true;
                 Unit.PokerBetSrvc.AddHistory(finalWinners.TrimEnd(','));
@@ -176,15 +177,18 @@ namespace PokerBet.Controllers
                     }
                 case 3:
                     {
-                        var winners = GetFinalInfo(gameNumber,"winner",game,isStatic ? new int[] {1,1,1} : riverNumber).Split(',');
-                        for (int i = 0; i < game.NumberOfPlayers; i++)
+                        if (isStatic == false)
                         {
-                            coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
-                            if (winners.Contains((i + 1).ToString()))
+                            var winners = GetFinalInfo(gameNumber, "winner", game, isStatic ? new int[] { 1, 1, 1 } : riverNumber).Split(',');
+                            for (int i = 0; i < game.NumberOfPlayers; i++)
                             {
-                                Unit.PokerBetSrvc.GenerateWinTickets(i,gameNumber);
-                                finalWinners += (gameNumber + 1).ToString() + i.ToString() + ",";
+                                coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
+                                if (winners.Contains((i + 1).ToString()))
+                                {
+                                    Unit.PokerBetSrvc.GenerateWinTickets(i, gameNumber);
+                                    finalWinners += (gameNumber + 1).ToString() + i.ToString() + ",";
 
+                                }
                             }
                         }
                         break;

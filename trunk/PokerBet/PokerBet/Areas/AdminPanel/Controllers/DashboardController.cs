@@ -22,6 +22,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
 
         protected UnitOfWork Unit { get; private set; }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Index(int? id)
         {
             List<Game> games = Unit.AdminSrvc.GetGames(id);
@@ -90,6 +91,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return View(resultModel);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Save(GamesModel model)
         {
             for (int i = 0; i < model.GameEditModel.Count; i++)
@@ -100,9 +102,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             }
 
             return RedirectToAction("Index", new { id=model.CurrentGame });
-        }
-
-        
+        }               
 
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
@@ -130,6 +130,12 @@ namespace PokerBet.Areas.AdminPanel.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }        
+
+        [HttpGet]
+        public ActionResult LogOn()
+        {
+            return View();
         }
 
         public ActionResult LogOff()
@@ -139,16 +145,11 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return RedirectToAction("LogOn");
         }
 
-        [HttpGet]
-        public ActionResult LogOn()
-        {
-            return View();
-        }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult Stop()
         {
             MvcApplication.timer.Stop();
-            Unit.AdminSrvc.Stop();
+            Unit.AdminSrvc.Stop();      
             return new EmptyResult();
         }
 
@@ -186,12 +187,26 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin")]
         public ActionResult Start()
         {
-            return View();
+            var rand = new Random();
+            var model = new List<RoundAndWinner>(8);
+            for (int i = 0; i < 8; i++)
+            {
+                model.Add(new RoundAndWinner()
+                {
+                    Winners = rand.Next(10, 14) + "," +
+                              rand.Next(20, 26) + "," +
+                              rand.Next(30, 38)
+                });
+            }
+            
+            return View(model);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Start(List<RoundAndWinner> model)
         {
             if (ModelState.IsValid)

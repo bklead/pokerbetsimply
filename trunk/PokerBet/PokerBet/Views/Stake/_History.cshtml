@@ -19,7 +19,7 @@
 
 @foreach (var stake in Model.Stakes)
 {
-    <tr class="@(stake.PaymentDate != null ? "green-stake" : (stake.RealWin != 0 ? "red-stake" : "blue-stake"))">
+    <tr data-id="@stake.Id" class="@(stake.PaymentDate != null ? "green-stake" : (stake.RealWin != 0 ? "red-stake" : "blue-stake"))">
     <td>@stake.StakeDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
     <td>@(stake.Amount)RUR</td>
     <td>@(stake.PossibleWin)RUR</td>

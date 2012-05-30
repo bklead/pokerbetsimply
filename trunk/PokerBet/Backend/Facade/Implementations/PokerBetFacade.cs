@@ -145,7 +145,8 @@ namespace Backend.Facade.Implementations
 
             if (current == null)
             {
-                games = GetNextGames();//ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                //games = GetNextGames(); //for random
                 SetState(new GameState()
                 {
                     Table4PlayerId = games[0].Id,
@@ -194,19 +195,25 @@ namespace Backend.Facade.Implementations
 
         private Game[] GetNextGames()
         {
-            var minPlayCount = ctx.Games.Min(p => p.PlayedCount);
-            var skip = new Random().Next(ctx.Games.Count(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount));
+            //var minPlayCount = ctx.Games.Min(p => p.PlayedCount);
+            //var skip = new Random().Next(ctx.Games.Count(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount));
 
-            var randomGame = ctx.Games.Where(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount).OrderBy(m => m.Id).Skip(skip).Take(1).First();
-            var games = ctx.Games.Where(m => m.Id >= randomGame.Id).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+            //var randomGame = ctx.Games.Where(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount).OrderBy(m => m.Id).Skip(skip).Take(1).First();
+            //var games = ctx.Games.Where(m => m.Id >= randomGame.Id).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
 
-            foreach (var game in games)
-            {
-                ++game.PlayedCount;
-            }
+            //foreach (var game in games)
+            //{
+            //    ++game.PlayedCount;
+            //}
 
-            ctx.SaveChanges();
+            //ctx.SaveChanges();
 
+            //return games;
+
+
+            var current = ctx.GameStates.First();
+            var games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+           
             return games;
         }
 
@@ -303,7 +310,7 @@ namespace Backend.Facade.Implementations
         
         public List<History> GetHistory()
         {
-            return ctx.History.ToList().OrderByDescending(m => m.Id).ToArray().Take(8).ToList();
+            return ctx.History.ToList().OrderByDescending(m => m.Id).ToArray().Take(8).ToArray().OrderBy(m => m.Round).ToList();
         }
 
         public void ClearRiverFinder()
@@ -422,7 +429,8 @@ namespace Backend.Facade.Implementations
 
         public bool AddHistory(string winners)
         {
-            //if (ctx.History.Count(m => m.Round == GetRound()) != 0) return false;
+            int currentRound = GetRound();
+            if (ctx.History.FirstOrDefault(m => m.Round == currentRound) != null) return false;
             var wins = winners.Split(',').OrderBy(m => m);
             winners = "";
             foreach (var item in wins)
