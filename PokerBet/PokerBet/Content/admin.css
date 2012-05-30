@@ -23,7 +23,7 @@ td input
     background: #B6DEB6
 }
 
-#start
+#start, #stop
 {
     float: right;
     height: 30px;

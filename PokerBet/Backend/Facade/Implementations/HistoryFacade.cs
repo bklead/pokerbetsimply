@@ -57,6 +57,7 @@ namespace Backend.Facade.Implementations
 
                 SingleStakeModel singleModel = new SingleStakeModel
                 {
+                    Id = firstMember.Id,
                     StakeDate = firstMember.StartDate,
                     Amount = firstMember.Sum,
                     PossibleWin = possibleSum,

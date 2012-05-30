@@ -14,6 +14,7 @@ namespace PokerBet.Controllers
 {
     public class CheckController : BaseController
     {
+        [Authorize(Roles = "Cashier, Admin")]
         public ActionResult Index(int id)
         {
             var bets = Unit.PokerBetSrvc.GetGameBet(id);

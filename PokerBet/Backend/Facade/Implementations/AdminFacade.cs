@@ -76,12 +76,12 @@ namespace Backend.Facade.Implementations
         {
             foreach (var entity in context.GameStates)
             {
-                context.Entry(entity).State = System.Data.EntityState.Deleted;
+                context.GameStates.Remove(entity);
             }
 
             foreach (var entity in context.History)
             {
-                context.Entry(entity).State = System.Data.EntityState.Deleted;
+                context.History.Remove(entity);
             }
 
             context.SaveChanges();

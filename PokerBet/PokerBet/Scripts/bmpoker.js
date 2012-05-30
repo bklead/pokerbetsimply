@@ -1,6 +1,6 @@
 ﻿var 
 	cache = new Array();
-var 
+var
 	roundNo = 1;
 var 
 	CurRoundNo = 1;
@@ -346,6 +346,7 @@ function getHistory() {
                     $(this).children('td:.tdRound').html(curData[0]);
                     $(this).children('td:.tdWinner').html(curData[1]);
                 });
+
                 //alert('Winners are set');
                 //$('#logData').html(string);
             } catch (e) {
@@ -394,6 +395,7 @@ function pulse() {
 }
 
 function getRound() {
+    getHistory();
     $.ajax({ type: 'GET', url: '/Home/Round', data: '', timeout: 10000,
         success: function (data) {
             if (deskCards == '5') {
@@ -556,7 +558,10 @@ $(function () {
         } else {
             var No = ~ ~CurRoundNo;
         }
-        if (deskCards == 0) getHistory();
+
+//        if (deskCards == 1) {
+//            getHistory();
+//        }
 
         $('#tmp').html(deskCards + '   ' + (globalData.ts));
         var j = 0;

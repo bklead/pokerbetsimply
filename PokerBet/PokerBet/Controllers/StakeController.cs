@@ -25,6 +25,7 @@ namespace PokerBet.Controllers
             };
         }
 
+        [Authorize(Roles = "Cashier, Admin")]
         public ActionResult Index()
         {
             ViewBag.CurrentDate = DateTime.Now.ToString("MM/dd/yyyy");
@@ -149,7 +150,7 @@ namespace PokerBet.Controllers
 
                 if (bets.Count(m => m.IsPayed) != 0)
                 {
-                    return Json(new { isWinning = false, message = "уже заплачено, նայի չլոխնաս" }, JsonRequestBehavior.AllowGet); 
+                    return Json(new { isWinning = false, message = "уже заплачено" }, JsonRequestBehavior.AllowGet); 
                 }
 
                 var sum = bets.Where(m => m.IsWinningTicket).Sum(m => m.Sum / bets.Count() * m.Index);
