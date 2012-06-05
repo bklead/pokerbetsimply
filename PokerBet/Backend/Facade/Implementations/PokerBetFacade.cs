@@ -217,26 +217,35 @@ namespace Backend.Facade.Implementations
             return games;
         }
 
+        public bool IsGameStateDefined()
+        {
+            return ctx.GameStates.FirstOrDefault() != null;
+        }
 
         public double GetPlayerCoefficient(short playerNumber, short currentState)
         {
-            int gameId;
-            short gameNumber = Convert.ToInt16(playerNumber.ToString().Substring(0, 1));
-            switch (gameNumber)
+            if (ctx.GameStates.FirstOrDefault() != null)
             {
-                case 1: gameId = ctx.GameStates.FirstOrDefault().Table4PlayerId; break;
-                case 2: gameId = ctx.GameStates.FirstOrDefault().Table6PlayerId; break;
-                default: gameId = ctx.GameStates.FirstOrDefault().Table8PlayerId; break;
+                int gameId;
+                short gameNumber = Convert.ToInt16(playerNumber.ToString().Substring(0, 1));
+                switch (gameNumber)
+                {
+                    case 1: gameId = ctx.GameStates.FirstOrDefault().Table4PlayerId; break;
+                    case 2: gameId = ctx.GameStates.FirstOrDefault().Table6PlayerId; break;
+                    default: gameId = ctx.GameStates.FirstOrDefault().Table8PlayerId; break;
+                }
+
+                string coeffs;
+                switch (currentState)
+                {
+                    case 0: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep1; break;
+                    case 1: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep2; break;
+                    default: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep3; break;
+                }
+                return Convert.ToDouble(coeffs.Split(',')[Convert.ToInt16(playerNumber.ToString().Substring(1, 1))]);
             }
 
-            string coeffs;
-            switch (currentState)
-            {
-                case 0: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep1; break;
-                case 1: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep2; break;
-                default: coeffs = ctx.Games.FirstOrDefault(p => p.Id == gameId).CoefficientsStep3; break;
-            }
-            return Convert.ToDouble(coeffs.Split(',')[Convert.ToInt16(playerNumber.ToString().Substring(1, 1))]);
+            return 0;
         }
 
         public GameBet[] GetGameBet(int id)
@@ -429,7 +438,7 @@ namespace Backend.Facade.Implementations
 
         public bool AddHistory(string winners)
         {
-            int currentRound = GetRound();
+            int currentRound = GetRound()-1;
             if (ctx.History.FirstOrDefault(m => m.Round == currentRound) != null) return false;
             var wins = winners.Split(',').OrderBy(m => m);
             winners = "";
@@ -440,8 +449,8 @@ namespace Backend.Facade.Implementations
 
             winners = winners.TrimEnd(',');
 
-            ctx.History.Add(new History() { 
-                Round = GetRound(),
+            ctx.History.Add(new History() {
+                Round = currentRound,
                 Winners = winners
             });
 

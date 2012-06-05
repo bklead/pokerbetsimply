@@ -10,8 +10,6 @@ var
 	deskCards;
 var
 	globalData;
-var  
-    callGetStakes = 0;
 var 
 	currentRIDS;
 var lears = {
@@ -137,8 +135,6 @@ var
 	chipClasses = new Array("chipBlue", "chipBlack", "chipYellow", "chipRed");
 
 function getStakes() {
-    callGetStakes++;
-    if (callGetStakes % 2 == 0) {
         $.ajax({ type: 'GET', url: '/Home/Stakes', data: '', timeout: 30000,
             success: function (data) {
                 try {
@@ -176,7 +172,6 @@ function getStakes() {
                 }
             }
         });
-    }
 }
 function changeMain(data) {
     $('#log').html(data);
@@ -368,6 +363,8 @@ function getMain() {
 
 function pulse() {
 
+    getHistory();
+
     $.ajax({ type: 'GET', url: '/Stake/CurrentRids', data: '', timeout: 10000,
         success: function (data) {
             var json = eval('(' + data + ')');
@@ -377,7 +374,7 @@ function pulse() {
     });
 
   //  $('#round').html(roundNo);
-   // getStakes();
+  //  getStakes();
   //  getMain();
     /*   for(i=roundNo-1;i>0 && i>=roundNo-8;i--) {
     $('td.tdRound').each(function(idx, obj){
@@ -395,7 +392,6 @@ function pulse() {
 }
 
 function getRound() {
-    getHistory();
     $.ajax({ type: 'GET', url: '/Home/Round', data: '', timeout: 10000,
         success: function (data) {
             if (deskCards == '5') {
@@ -687,7 +683,6 @@ $(function () {
         getHistory();
         $('#progressbar .ui-progress .ui-label').hide();
         $('#progressbar .ui-progress').css('width', '0%');
-        $()
     });
 });
 

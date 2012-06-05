@@ -18,7 +18,7 @@ namespace Backend.Facade.Interfaces
         GameState GetCurrentState();
         GameBet[] GetGameBet(int id);
         int? CreateStake(string[] playerList, string[] oddList, string sum);
-
+        bool IsGameStateDefined();
 
         List<History> GetHistory();
         void ClearRiverFinder();
