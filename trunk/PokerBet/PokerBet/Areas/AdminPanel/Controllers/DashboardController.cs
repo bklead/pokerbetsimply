@@ -8,6 +8,7 @@ using Domain;
 using PokerBet.Areas.AdminPanel.Models;
 using PokerBet.Controllers;
 using System.Web.Security;
+using PokerBet.Helpers;
 
 namespace PokerBet.Areas.AdminPanel.Controllers
 {
@@ -22,7 +23,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
 
         protected UnitOfWork Unit { get; private set; }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Index(int? id)
         {
             List<Game> games = Unit.AdminSrvc.GetGames(id);
@@ -91,7 +92,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return View(resultModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Save(GamesModel model)
         {
             for (int i = 0; i < model.GameEditModel.Count; i++)
@@ -145,11 +146,12 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             return RedirectToAction("LogOn");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Stop()
         {
             MvcApplication.timer.Stop();
-            Unit.AdminSrvc.Stop();      
+            Unit.AdminSrvc.Stop();
+            PokerBet.Controllers.HomeController.stakes = new Stakes();
             return new EmptyResult();
         }
 
@@ -187,7 +189,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles="Admin")]
+        //[Authorize(Roles="Admin")]
         public ActionResult Start()
         {
             var rand = new Random();
@@ -206,7 +208,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Start(List<RoundAndWinner> model)
         {
             if (ModelState.IsValid)

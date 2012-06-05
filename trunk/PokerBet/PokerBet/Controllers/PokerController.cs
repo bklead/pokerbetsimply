@@ -7,6 +7,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using Domain;
 using PokerBet.Helpers;
+using System.Timers;
 
 namespace PokerBet.Controllers
 {
@@ -16,9 +17,12 @@ namespace PokerBet.Controllers
         private static bool hasRiverFinderStarted = false;
         private static int[] riverNumber = {1,1,1};
         private static short currentState;
-        private static Stakes stakes = new Stakes();
+        public static Stakes stakes = new Stakes();
         private static Random random = new Random();
+        private static DateTime stakeAddLastDate = DateTime.Now;
         private static bool firstTimeHistoryAdd = false;
+        public static Timer stakeTimer;
+        public static string finalGameWinners;
 
         public HomeController()
         {
@@ -30,7 +34,7 @@ namespace PokerBet.Controllers
             };
         }
 
-        [Authorize(Roles = "Cashier, Admin")]
+        //[Authorize(Roles = "Cashier, Admin")]
         public ActionResult Index()
         {
             return View();
@@ -38,7 +42,12 @@ namespace PokerBet.Controllers
 
         public ActionResult Stakes()
         {
-            InitializeStakes();
+            if ((DateTime.Now - stakeAddLastDate).TotalMilliseconds >= 1800)
+            {
+                stakeAddLastDate = DateTime.Now;
+                InitializeStakes();
+            }
+
             return Json("{ '35': " + stakes.Stake35 + ", '33': " + stakes.Stake33 + ", '25': " + stakes.Stake25 + ", '20': " + stakes.Stake20 + ", '22': " + stakes.Stake22 + ", '32': " + stakes.Stake32 + ", '11': " + stakes.Stake11 + ", '21': " + stakes.Stake21 + ", '36': " + stakes.Stake36 + ", '12': " + stakes.Stake12 + ", '34': " + stakes.Stake34 + ", '37': " + stakes.Stake37 + ", '30': " + stakes.Stake30 + ", '24': " + stakes.Stake24 + ", '13': " + stakes.Stake13 + ", '10': " + stakes.Stake10 + ", '23': " + stakes.Stake23 + ", '31': " + stakes.Stake31 + " }", JsonRequestBehavior.AllowGet);
         }
 
@@ -100,15 +109,15 @@ namespace PokerBet.Controllers
 
             if (state == 0 && firstTimeHistoryAdd == true)
             {
-
                 firstTimeHistoryAdd = false;
                 finalWinners = "";
+                Unit.PokerBetSrvc.AddHistory(finalGameWinners);
             }
 
             if (state == 3 && !String.IsNullOrEmpty(finalWinners) && firstTimeHistoryAdd==false)
             {
                 firstTimeHistoryAdd = true;
-                Unit.PokerBetSrvc.AddHistory(finalWinners.TrimEnd(','));
+                finalGameWinners = finalWinners.TrimEnd(',');
             }
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));
@@ -279,7 +288,7 @@ namespace PokerBet.Controllers
             return Unit.PokerBetSrvc.GetCardNameByID(id);
         }
 
-        private void InitializeStakes()
+        public void InitializeStakes()
         {
             if (GetPlayerCoefficient(10) > 1) stakes.Stake10 += GetRandomNumber();
             if (GetPlayerCoefficient(11) > 1) stakes.Stake11 += GetRandomNumber();
@@ -308,12 +317,14 @@ namespace PokerBet.Controllers
 
         private int GetRandomNumber()
         {
-            var x = random.Next(0, 31);
-            if (x <= 23)
+            var x = random.Next(0, 51);
+            if (x <= 40)
                 return 0;
-            else if (x <= 26)
-                return random.Next(0, 50);
-            else if (x <= 28)
+            else if (x <= 42)
+                return random.Next(0, 8) * 10;
+            else if (x <= 44)
+                return random.Next(0, 18) * 10;
+            else if (x <= 47)
                 return random.Next(0, 150);
             else
                 return random.Next(0, 800);

@@ -25,7 +25,7 @@ namespace PokerBet.Controllers
             };
         }
 
-        [Authorize(Roles = "Cashier, Admin")]
+        //[Authorize(Roles = "Cashier, Admin")]
         public ActionResult Index()
         {
             ViewBag.CurrentDate = DateTime.Now.ToString("MM/dd/yyyy");

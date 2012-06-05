@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Timers;
 using Backend;
+using PokerBet.Helpers;
 
 namespace PokerBet
 {
@@ -15,6 +16,7 @@ namespace PokerBet
     public class MvcApplication : System.Web.HttpApplication
     {
         public static Timer timer;
+        protected UnitOfWork Unit { get; private set; }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -36,6 +38,7 @@ namespace PokerBet
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            Unit = new UnitOfWork();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
