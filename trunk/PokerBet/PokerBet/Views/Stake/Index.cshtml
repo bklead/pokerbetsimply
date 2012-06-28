@@ -27,7 +27,7 @@
         });
 
         $('#check-view-modal').dialog({
-            modal: false,
+            modal: true,
             autoOpen: false,
             width: 350,
             height: 800,
@@ -103,7 +103,7 @@
         $('#history-div').click(function () {
             $("#stake-history").load("/Stake/GetHistory", function () {
 
-                $('.blue-stake').click(function () {
+                $('.blue-stake,.red-stake,.green-stake').live("click", function () {
                     var id = $(this).data('id'); 
                     $("#check-view-modal").load("/Check/Index/" + id, function() {
                         $('#check-view-modal').dialog('open');

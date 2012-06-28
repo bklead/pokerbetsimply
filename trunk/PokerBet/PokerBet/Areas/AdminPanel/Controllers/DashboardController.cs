@@ -24,7 +24,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         protected UnitOfWork Unit { get; private set; }
 
         //[Authorize(Roles = "Admin")]
-        public ActionResult Index(int? id)
+       /* public ActionResult Index(int? id)
         {
             List<Game> games = Unit.AdminSrvc.GetGames(id);
 
@@ -95,6 +95,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
         //[Authorize(Roles = "Admin")]
         public ActionResult Save(GamesModel model)
         {
+            
             for (int i = 0; i < model.GameEditModel.Count; i++)
             {
                 Unit.AdminSrvc.SaveValues(model.CurrentGame, i, model.GameEditModel[i].River2, model.GameEditModel[i].Winner2, model.GameEditModel[i].Winning2,
@@ -103,7 +104,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
             }
 
             return RedirectToAction("Index", new { id=model.CurrentGame });
-        }               
+        }   */            
 
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)

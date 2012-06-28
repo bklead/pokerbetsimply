@@ -32,6 +32,7 @@
 .green-stake
 {
     color:Green;
+    cursor: pointer;
 }
 
 .blue-stake
@@ -43,6 +44,7 @@
 .red-stake
 {
     color:Red;
+    cursor: pointer;
 }
 
 .ui-dialog-titlebar
