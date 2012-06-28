@@ -23,5 +23,6 @@ namespace Domain
         public bool IsWinningTicket { get; set; }
         public bool IsPayed { get; set; }
         public DateTime? PaymentDate { get; set; }
+        public int GameId { get; set; }
     }
 }

@@ -22,7 +22,6 @@ namespace PokerBet.Controllers
         private static DateTime stakeAddLastDate = DateTime.Now;
         private static bool firstTimeHistoryAdd = false;
         public static Timer stakeTimer;
-        public static string finalGameWinners;
 
         public HomeController()
         {
@@ -82,11 +81,8 @@ namespace PokerBet.Controllers
                 currentState = state;
                 if (state == 0 && !hasRiverFinderStarted)
                 {
-                    Unit.PokerBetSrvc.ClearRiverFinder();
-                    Unit.PokerBetSrvc.AddGameUniqueNumber();
                     stakes = new Stakes();
                     hasRiverFinderStarted = true;
-
                 }
                 if (state == 3 && hasRiverFinderStarted)
                 {
@@ -111,13 +107,11 @@ namespace PokerBet.Controllers
             {
                 firstTimeHistoryAdd = false;
                 finalWinners = "";
-                Unit.PokerBetSrvc.AddHistory(finalGameWinners);
             }
 
             if (state == 3 && !String.IsNullOrEmpty(finalWinners) && firstTimeHistoryAdd==false)
             {
                 firstTimeHistoryAdd = true;
-                finalGameWinners = finalWinners.TrimEnd(',');
             }
 
             return Content(mainJson.ToString(Newtonsoft.Json.Formatting.None));
@@ -194,7 +188,6 @@ namespace PokerBet.Controllers
                                 coefficients[i] = winners.Contains((i + 1).ToString()) ? "0.97" : "0";
                                 if (winners.Contains((i + 1).ToString()))
                                 {
-                                    Unit.PokerBetSrvc.GenerateWinTickets(i, gameNumber);
                                     finalWinners += (gameNumber + 1).ToString() + i.ToString() + ",";
 
                                 }

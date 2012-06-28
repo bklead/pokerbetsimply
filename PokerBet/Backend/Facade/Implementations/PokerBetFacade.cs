@@ -138,14 +138,15 @@ namespace Backend.Facade.Implementations
             return ctx.GameStates.First();
         }
 
-        public bool ChangeGameState(int? round)
+        public int? ChangeGameState(int? round)
         {
             var current = ctx.GameStates.FirstOrDefault();
             Game[] games = null;
+            int state = 0;
 
             if (current == null)
             {
-                games = ctx.Games.Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+                games = GetNextGames();
                 //games = GetNextGames(); //for random
                 SetState(new GameState()
                 {
@@ -164,6 +165,7 @@ namespace Backend.Facade.Implementations
                     current.StartTime = DateTime.Now;
                     current.State++;
                     games = new Game[] { current.Table4Player, current.Table6Player, current.Table8Player };
+                    state = current.State;
                 }
                 else
                 {
@@ -185,36 +187,45 @@ namespace Backend.Facade.Implementations
             try
             {
                 ctx.SaveChanges();
-                return true;
+                return state;
             }
             catch (Exception)
             {
-                return false;
+                return null;
             }
         }
 
         private Game[] GetNextGames()
         {
-            //var minPlayCount = ctx.Games.Min(p => p.PlayedCount);
-            //var skip = new Random().Next(ctx.Games.Count(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount));
+            var minPlayCount = ctx.Games.Min(p => p.PlayedCount);
+            var skip = new Random().Next(ctx.Games.Count(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount));
 
-            //var randomGame = ctx.Games.Where(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount).OrderBy(m => m.Id).Skip(skip).Take(1).First();
-            //var games = ctx.Games.Where(m => m.Id >= randomGame.Id).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
+            var randomGame = ctx.Games.Where(m => m.NumberOfPlayers == 4 && m.PlayedCount == minPlayCount).OrderBy(m => m.Id).Skip(skip).Take(1).First();
+            var games = ctx.Games.Where(m => m.Id >= randomGame.Id).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
 
-            //foreach (var game in games)
-            //{
-            //    ++game.PlayedCount;
-            //}
+            var gamesWithMinCount = ctx.Games.Count(p => p.PlayedCount == minPlayCount);
 
-            //ctx.SaveChanges();
+            foreach (var game in games)
+            {
+                if (gamesWithMinCount < 50)
+                {
+                    game.PlayedCount += 2;
+                }
+                else
+                {
+                    ++game.PlayedCount;
+                }
+            }
 
-            //return games;
+            ctx.SaveChanges();
+
+            return games;
 
 
-            var current = ctx.GameStates.First();
+            /*var current = ctx.GameStates.First();
             var games = ctx.Games.Where(m => m.Id > current.Table8PlayerId).Take(3).ToArray().OrderBy(m => m.NumberOfPlayers).ToArray();
            
-            return games;
+            return games;*/
         }
 
         public bool IsGameStateDefined()
@@ -284,7 +295,8 @@ namespace Backend.Facade.Implementations
                             TableCode = GetRound(), //need to set to current game number
                             Event = ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value + Convert.ToInt64(playerList[i].Substring(0, 1)),
                             ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1,
-                            GameUniqueNumber = ctx.Constants.FirstOrDefault(p=>p.Name == "GameUniqueNumber").Value
+                            GameUniqueNumber = ctx.Constants.FirstOrDefault(p=>p.Name == "GameUniqueNumber").Value,
+                            GameId = ctx.GameStates.FirstOrDefault().Table4PlayerId + Convert.ToInt32(playerList[i].Substring(0, 1)) - 1
                         };
                         ctx.GameBets.Add(bet);
 
@@ -324,32 +336,42 @@ namespace Backend.Facade.Implementations
 
         public void ClearRiverFinder()
         {
-            ctx.RiverFinder.ForEach(p => p.Prize1 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize2 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize3 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize4 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize5 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize6 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize7 = 0);
-            ctx.RiverFinder.ForEach(p => p.Prize8 = 0);
-            ctx.SaveChanges();
+            using (var context = new PokerBetContext())
+            {
+                foreach (var row in context.RiverFinder)
+                {
+                    row.Prize1 = 0;
+                    row.Prize2 = 0;
+                    row.Prize3 = 0;
+                    row.Prize4 = 0;
+                    row.Prize5 = 0;
+                    row.Prize6 = 0;
+                    row.Prize7 = 0;
+                    row.Prize8 = 0;
+                }
+                context.SaveChanges();
+            }
+
         }
 
         private void SetPossiblePrizesList(int i,string[] winners,ref double[] prizes)
         {
-            foreach (string winner in winners)
+            using (var context = new PokerBetContext())
             {
-                short numberOfPlayers = GetNumberOfPlayers(Convert.ToInt16(i + 1));
-                switch (winner)
+                foreach (string winner in winners)
                 {
-                    case "1": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize1; break;
-                    case "2": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize2; break;
-                    case "3": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize3; break;
-                    case "4": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize4; break;
-                    case "5": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize5; break;
-                    case "6": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize6; break;
-                    case "7": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize7; break;
-                    case "8": prizes[i] += ctx.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize8; break;
+                    short numberOfPlayers = GetNumberOfPlayers(Convert.ToInt16(i + 1));
+                    switch (winner)
+                    {
+                        case "1": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize1; break;
+                        case "2": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize2; break;
+                        case "3": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize3; break;
+                        case "4": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize4; break;
+                        case "5": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize5; break;
+                        case "6": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize6; break;
+                        case "7": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize7; break;
+                        case "8": prizes[i] += context.RiverFinder.FirstOrDefault(p => p.NumberOfPlayers == numberOfPlayers).Prize8; break;
+                    }
                 }
             }
         }
@@ -421,8 +443,8 @@ namespace Backend.Facade.Implementations
         }
 
         public bool PayCheckByNumber(long numb)
-        {             
-            ctx.GameBets.Where(m => m.ContractNumber == numb).ForEach(m => m.IsPayed = true);
+        {
+            ctx.GameBets.Where(m => m.ContractNumber == numb).ForEach(m => { m.IsPayed = true; m.PaymentDate = DateTime.Now; });
 
             try
             {

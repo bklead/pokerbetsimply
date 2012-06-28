@@ -14,7 +14,7 @@ namespace Backend.Facade.Interfaces
         Game[] GetTableById(int id);
         Card GetCardByID(short id);
         String GetCardNameByID(short id);
-        Boolean ChangeGameState(int? round = null);
+        int? ChangeGameState(int? round = null);
         GameState GetCurrentState();
         GameBet[] GetGameBet(int id);
         int? CreateStake(string[] playerList, string[] oddList, string sum);
