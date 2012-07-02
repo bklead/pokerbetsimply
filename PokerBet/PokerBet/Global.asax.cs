@@ -18,7 +18,7 @@ namespace PokerBet
     {
         public static Timer timer;
         private static int[] riverNumber = { 1, 1, 1 };
-        protected UnitOfWork Unit { get; private set; }
+        protected static UnitOfWork Unit { get; private set; }
         public static string finalGameWinners;
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
@@ -54,6 +54,11 @@ namespace PokerBet
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             int? state =  new UnitOfWork().PokerBetSrvc.ChangeGameState();
+            DoGeneralActions(state);
+        }
+
+        public static void DoGeneralActions(int? state)
+        {
             if (state != null)
             {
                 var finalWinners = "";
@@ -87,7 +92,7 @@ namespace PokerBet
             }
         }
 
-        private string GetFinalInfo(int gameNumber, string info, Game game, int[] riverNumber)
+        private static string GetFinalInfo(int gameNumber, string info, Game game, int[] riverNumber)
         {
             switch (info)
             {

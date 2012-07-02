@@ -228,6 +228,7 @@ namespace PokerBet.Areas.AdminPanel.Controllers
                 if (result != -1)
                 {
                     Unit.PokerBetSrvc.ChangeGameState(result);
+                    MvcApplication.DoGeneralActions(0);
                     MvcApplication.timer.Start();
                     return Redirect("/");
                 }

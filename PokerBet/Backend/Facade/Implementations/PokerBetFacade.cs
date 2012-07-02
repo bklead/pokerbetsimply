@@ -319,8 +319,13 @@ namespace Backend.Facade.Implementations
                 }
                 ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value += 3;
                 ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value += 1;
-                ctx.SaveChanges();
-                return bet.Id;
+
+                if (ctx.GameStates.FirstOrDefault().State != 3)
+                {
+                    ctx.SaveChanges();
+                    return bet.Id;
+                }
+                return null;
             }
             catch
             {
