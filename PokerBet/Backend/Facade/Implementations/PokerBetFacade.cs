@@ -285,6 +285,13 @@ namespace Backend.Facade.Implementations
                 {
                     if (Convert.ToDouble(oddList[i]) > 1)
                     {
+                        int gameId;
+                        switch (Convert.ToInt32(playerList[i].Substring(0, 1)))
+                        {
+                            case 1: gameId = ctx.GameStates.FirstOrDefault().Table4PlayerId; break;
+                            case 2: gameId = ctx.GameStates.FirstOrDefault().Table6PlayerId; break;
+                            default: gameId = ctx.GameStates.FirstOrDefault().Table8PlayerId; break;
+                        }
                         bet = new GameBet
                         {
                             Winner = Convert.ToInt32(playerList[i]),
@@ -296,7 +303,7 @@ namespace Backend.Facade.Implementations
                             Event = ctx.Constants.FirstOrDefault(p => p.Name == "Event").Value + Convert.ToInt64(playerList[i].Substring(0, 1)),
                             ContractNumber = ctx.Constants.FirstOrDefault(p => p.Name == "ContractNumber").Value + 1,
                             GameUniqueNumber = ctx.Constants.FirstOrDefault(p=>p.Name == "GameUniqueNumber").Value,
-                            GameId = ctx.GameStates.FirstOrDefault().Table4PlayerId + Convert.ToInt32(playerList[i].Substring(0, 1)) - 1
+                            GameId = gameId
                         };
                         ctx.GameBets.Add(bet);
 
