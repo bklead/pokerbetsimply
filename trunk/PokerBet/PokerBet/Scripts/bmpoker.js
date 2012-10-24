@@ -358,7 +358,7 @@ function getMain() {
             //globalData = {'three':{'playersNo':'8','deskCards':'Qh Qd 5c 2d 3h','BH':'Straight','players':{'6':{'K':'0.97','cards':'4h 6d','id':'#three6','V':'1.0000'},'4':{'K':'0','cards':'3c 5s','id':'#three4','V':'0.0000'},'1':{'K':'0','cards':'As Qs','id':'#three1','V':'0.0000'},'3':{'K':'0','cards':'Jc 9s','id':'#three3','V':'0.0000'},'0':{'K':'0','cards':'Kh 2c','id':'#three0','V':'0.0000'},'7':{'K':'0','cards':'Ts Kd','id':'#three7','V':'0.0000'},'2':{'K':'0','cards':'4c Ad','id':'#three2','V':'0.0000'},'5':{'K':'0','cards':'4d 2h','id':'#three5','V':'0.0000'}}},'timestamp':1336736106,'one':{'playersNo':'4','deskCards':'Ac Qs 4s 2d 8d','BH':'OnePair','players':{'1':{'K':'0.97','cards':'5d Qd','id':'#one1','V':'1.0000'},'3':{'K':'0','cards':'7h 8s','id':'#one3','V':'0.0000'},'0':{'K':'0','cards':'Kh 6d','id':'#one0','V':'0.0000'},'2':{'K':'0','cards':'Ts Js','id':'#one2','V':'0.0000'}}},'two':{'playersNo':'6','deskCards':'Ks 2h 5c 3d 2s','BH':'Trips','players':{'4':{'K':'0.97','cards':'2d 9h','id':'#two4','V':'1.0000'},'1':{'K':'0','cards':'7d 5s','id':'#two1','V':'0.0000'},'3':{'K':'0','cards':'8c 3h','id':'#two3','V':'0.0000'},'0':{'K':'0','cards':'Jd Qs','id':'#two0','V':'0.0000'},'2':{'K':'0','cards':'Ts 9d','id':'#two2','V':'0.0000'},'5':{'K':'0','cards':'3s 5h','id':'#two5','V':'0.0000'}}},'ts':'1336736118'};
             changeMain(globalData);
         }
-    });
+    },1000);
 }
 
 function pulse() {

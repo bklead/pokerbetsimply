@@ -406,28 +406,31 @@ namespace Backend.Facade.Implementations
         {
             int[] result = {1,1,1};
 
-            for(int i=0;i<3;i++)
+            if (games.Count(p => p.Id % 9 == 0) == 0)
             {
-                double[] prizes = { 0, 0, 0 };
-                string[] winners = games[i].Winner1.Split(',');
-                SetPossiblePrizesList(i,winners, ref prizes);
-
-                for (int j = 2; j <= 4; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    double[] testPrizes = { 0, 0, 0 };
-                    switch (j)
+                    double[] prizes = { 0, 0, 0 };
+                    string[] winners = games[i].Winner1.Split(',');
+                    SetPossiblePrizesList(i, winners, ref prizes);
+
+                    for (int j = 2; j <= 4; j++)
                     {
-                        case 2: winners = games[i].Winner2 != null ? games[i].Winner2.Split(',') : null; break;
-                        case 3: winners = games[i].Winner3 != null ? games[i].Winner3.Split(',') : null; break;
-                        case 4: winners = games[i].Winner4 != null ? games[i].Winner4.Split(',') : null; break;
-                    }
-                    if (winners != null)
-                    {
-                        SetPossiblePrizesList(i, winners, ref testPrizes);
-                        if (testPrizes[i] < prizes[i])
+                        double[] testPrizes = { 0, 0, 0 };
+                        switch (j)
                         {
-                            prizes[i]=testPrizes[i];
-                            result[i] = j;
+                            case 2: winners = games[i].Winner2 != null ? games[i].Winner2.Split(',') : null; break;
+                            case 3: winners = games[i].Winner3 != null ? games[i].Winner3.Split(',') : null; break;
+                            case 4: winners = games[i].Winner4 != null ? games[i].Winner4.Split(',') : null; break;
+                        }
+                        if (winners != null)
+                        {
+                            SetPossiblePrizesList(i, winners, ref testPrizes);
+                            if (testPrizes[i] < prizes[i])
+                            {
+                                prizes[i] = testPrizes[i];
+                                result[i] = j;
+                            }
                         }
                     }
                 }
